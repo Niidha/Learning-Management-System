@@ -1,0 +1,161 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .container {
+    width: 2000px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card Styles */
+  .card {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Viewing Details Box */
+  .card-body ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 8px 0;
+   text-align: left;
+  }
+  
+  
+  .card-body ul li strong {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Form Group Styling for Horizontal Layout */
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .form-group label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    display: inline-block;
+    margin-right: 20px;
+    width: 30%;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 65%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Input Alignment for the Age Section */
+  .form-group input[type="number"] {
+    display: inline-block;
+    width: auto;
+    max-width: 70px;
+    text-align: center;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .input-group button {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .input-group button:hover {
+    background-color: #e2e6ea;
+  }
+  
+  /* Submit Button Styling */
+  button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 15%;
+    transition: background-color 0.3s ease;
+   
+    
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+    
+  }
+  
+  /* List Styling for Details Section */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  ul li strong {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Error & Loading Messages */
+  .error {
+    color: #ff4d4f;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  
+  .loading {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+  }
+  
