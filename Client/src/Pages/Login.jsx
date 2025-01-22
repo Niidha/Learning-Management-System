@@ -21,8 +21,8 @@ const Login = () => {
                 
                 const { userId, token } = data;
 
-                localStorage.setItem("userId", userId); // Store userId
-                localStorage.setItem("access_token", token); // Store token
+                localStorage.setItem("userId", userId); 
+                localStorage.setItem("access_token", token); 
                 
                 dispatch(createUser(data.user))
                 toast.success("Logged In")
@@ -62,6 +62,13 @@ const Login = () => {
                     onClick={() => navigate('/signup')}
                 >
                     Signup
+                </button>
+                <button
+                    className='btn btn-info w-100 mt-2'
+                    type='button'
+                    onClick={() => navigate('/addcourse')}
+                >
+                    Add Course
                 </button>
             </form>
         </div>

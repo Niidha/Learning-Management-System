@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-
+import { useParams, Link } from 'react-router-dom';
+import { api } from '../axios';
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -10,7 +10,7 @@ const CourseDetail = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`http://localhost:7000/api/users/courses/${id}`);
+        const response = await api.get(`users/courses/${id}`);
         setCourse(response.data);
       } catch (err) {
         console.error('Error fetching course details:', err);
@@ -24,19 +24,15 @@ const CourseDetail = () => {
   return (
     <div style={containerStyles}>
       <div style={contentStyles}>
-        <div style={imageContainerStyles}>
+      <div style={imageContainerStyles}>
           <img
             src={course.image}
             alt={course.title}
             style={imageStyles}
           />
         </div>
-
         <h1 style={titleStyles}>{course.title}</h1>
-
-        <p style={descriptionStyles}>
-          {course.description}
-        </p>
+        <p style={descriptionStyles}>{course.description}</p>
 
         <div style={sectionStyles}>
           <h2>Syllabus</h2>
@@ -53,9 +49,12 @@ const CourseDetail = () => {
                   <tr key={index}>
                     <td style={tableCellStyles}>{index + 1}</td>
                     <td style={tableCellStyles}>
-                      <a href={item.video_link} target="_blank" rel="noopener noreferrer" style={linkStyles}>
+                      <Link
+                        to={`/videos/${id}/${encodeURIComponent(item.topic)}`}
+                        style={linkStyles}
+                      >
                         {item.topic}
-                      </a>
+                      </Link>
                     </td>
                   </tr>
                 ))}
@@ -67,61 +66,93 @@ const CourseDetail = () => {
         </div>
 
         <div style={sectionStyles}>
-          <h2>Tests</h2>
-          <ul style={listStyles}>
-            {Array.isArray(course.tests) && course.tests.length > 0 ? (
-              course.tests.map((test, index) => (
-                <li key={index}>
-                  <a href={test.link} target="_blank" rel="noopener noreferrer" style={linkStyles}>
-                    {test.title}
-                  </a>
-                </li>
-              ))
-            ) : (
-              <p>No tests available</p>
-            )}
-          </ul>
+          <h2>Study Materials</h2>
+          {Array.isArray(course.study_materials) && course.study_materials.length > 0 ? (
+            <table style={tableStyles}>
+              <thead>
+                <tr>
+                  <th style={tableHeaderStyles}>#</th>
+                  <th style={tableHeaderStyles}>Study Material</th>
+                </tr>
+              </thead>
+              <tbody>
+                {course.study_materials.map((material, index) => (
+                  <tr key={index}>
+                    <td style={tableCellStyles}>{index + 1}</td>
+                    <td style={tableCellStyles}>
+                      <a href={material} target="_blank" rel="noopener noreferrer" style={linkStyles}>
+                        Material {index + 1}
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No study materials available</p>
+          )}
         </div>
 
         <div style={sectionStyles}>
           <h2>Exercises</h2>
-          <ul style={listStyles}>
-            {Array.isArray(course.exercises) && course.exercises.length > 0 ? (
-              course.exercises.map((exercise, index) => (
-                <li key={index}>
-                  <a href={exercise.link} target="_blank" rel="noopener noreferrer" style={linkStyles}>
-                    {exercise.title}
-                  </a>
-                </li>
-              ))
-            ) : (
-              <p>No exercises available</p>
-            )}
-          </ul>
+          {Array.isArray(course.exercises) && course.exercises.length > 0 ? (
+            <table style={tableStyles}>
+              <thead>
+                <tr>
+                  <th style={tableHeaderStyles}>#</th>
+                  <th style={tableHeaderStyles}>Exercise</th>
+                </tr>
+              </thead>
+              <tbody>
+                {course.exercises.map((exercise, index) => (
+                  <tr key={index}>
+                    <td style={tableCellStyles}>{index + 1}</td>
+                    <td style={tableCellStyles}>
+                      <a href={exercise} target="_blank" rel="noopener noreferrer" style={linkStyles}>
+                        Exercise {index + 1}
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No exercises available</p>
+          )}
         </div>
 
         <div style={sectionStyles}>
-          <h2>Study Materials</h2>
-          <ul style={listStyles}>
-            {Array.isArray(course.study_materials) && course.study_materials.length > 0 ? (
-              course.study_materials.map((material, index) => (
-                <li key={index}>
-                  <a href={material.link} target="_blank" rel="noopener noreferrer" style={linkStyles}>
-                    {material.title}
-                  </a>
-                </li>
-              ))
-            ) : (
-              <p>No study materials available</p>
-            )}
-          </ul>
+          <h2>Tests</h2>
+          {Array.isArray(course.tests) && course.tests.length > 0 ? (
+            <table style={tableStyles}>
+              <thead>
+                <tr>
+                  <th style={tableHeaderStyles}>#</th>
+                  <th style={tableHeaderStyles}>Test</th>
+                </tr>
+              </thead>
+              <tbody>
+                {course.tests.map((test, index) => (
+                  <tr key={index}>
+                    <td style={tableCellStyles}>{index + 1}</td>
+                    <td style={tableCellStyles}>
+                      <a href={test} target="_blank" rel="noopener noreferrer" style={linkStyles}>
+                        Test {index + 1}
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No tests available</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Styles
 const containerStyles = {
   display: 'flex',
   justifyContent: 'center',
@@ -138,7 +169,6 @@ const contentStyles = {
   borderRadius: '10px',
   boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
 };
-
 const imageContainerStyles = {
   display: 'flex',
   justifyContent: 'center',
@@ -153,7 +183,6 @@ const imageStyles = {
   borderRadius: '8px',
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
 };
-
 const titleStyles = {
   textAlign: 'center',
   fontSize: '32px',
@@ -173,24 +202,6 @@ const sectionStyles = {
   marginBottom: '20px',
 };
 
-const listStyles = {
-  listStyleType: 'none',
-  paddingLeft: '0',
-};
-
-const linkStyles = {
-  color: '#007bff',
-  textDecoration: 'none',
-  fontSize: '16px',
-  transition: 'color 0.3s',
-};
-
-linkStyles[':hover'] = {
-  color: '#0056b3',
-  textDecoration: 'underline',
-};
-
-// Table styles
 const tableStyles = {
   width: '100%',
   borderCollapse: 'collapse',
@@ -208,6 +219,18 @@ const tableCellStyles = {
   padding: '10px',
   border: '1px solid #ddd',
   textAlign: 'left',
+};
+
+const linkStyles = {
+  color: '#007bff',
+  textDecoration: 'none',
+  fontSize: '16px',
+  transition: 'color 0.3s',
+};
+
+linkStyles[':hover'] = {
+  color: '#0056b3',
+  textDecoration: 'underline',
 };
 
 export default CourseDetail;

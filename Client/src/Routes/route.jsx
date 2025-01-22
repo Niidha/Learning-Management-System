@@ -9,6 +9,10 @@ import CourseDetail from "../Pages/CourseDetail";
 
 import ViewProfile from "../Pages/ViewProfile";
 import UpdateProfile from "../Pages/UpdateProfile";
+import AddCourse from "../provider/addCourse";
+import FavoritesPage from "../Pages/favourites";
+import VideoList from "../Pages/videofetching";
+
 
 
 
@@ -17,9 +21,13 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="/" element={ <Login /> }/>
+          <Route path="signup" element={<ProtectedRoute auth={true} ><Signup /></ProtectedRoute>} />
+      
+         
+
         </Route>
+        <Route path="addcourse" element={<AddCourse />} />
         <Route path="/" element={<Layout />}>
           <Route
             path="studentdetail"
@@ -34,6 +42,9 @@ const Router = () => {
           <Route path="courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="/view-profile" element={<ProtectedRoute><ViewProfile /></ProtectedRoute>} />
           <Route path="/update-profile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+          <Route path="/favorites" element={<ProtectedRoute><FavoritesPage/></ProtectedRoute>} />
+          <Route path="/videos/:courseId/:topic" element={<ProtectedRoute><VideoList /></ProtectedRoute>} />
+          
        
      
      

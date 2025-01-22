@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../css/details.css"; // Assuming you have a CSS file for styling
 import { useSelector } from "react-redux";
+import { api } from "../axios";
 
 const UpdateUserProfile = () => {
   // Initialize form data with empty values
@@ -32,7 +33,7 @@ const UpdateUserProfile = () => {
 
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:7000/api/users/${userId}`, {
+        const response = await api.get(`users/${userId}`, {
           // headers: {
           //   Authorization: `Bearer ${localStorage.getItem("token")}`,
           // },
@@ -60,8 +61,7 @@ const UpdateUserProfile = () => {
     e.preventDefault();
     setLoading(true); // Start loading animation or state
     try {
-      const response = await axios.patch(
-        `http://localhost:7000/api/users/update/${userId}`, // Use userId in the URL
+      const response = await api.patch(`users/update/${userId}`, // Use userId in the URL
         formData,
         {
           headers: {

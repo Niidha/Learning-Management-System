@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser } from 'react-icons/fa';
+import { FaHeart, FaShoppingCart, FaUser } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'; 
 import FeedbackModal from './feedaback';
-
+import { api } from '../axios';
+import { useFavorites } from './favProvider';
+import { addToFavorites } from '../Redux/favSlice';
+import toast from 'react-hot-toast';
 
 const CourseList = () => {
+  const dispatch = useDispatch()
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false); // Manage modal visibility
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const { favoritesList, setFavoritesList } = useFavorites();
 
   const navigate = useNavigate();
+  const favorites = useSelector((state) => state.favorites.items || []);
   const { username, id } = useSelector((state) => state.user || {});
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('http://localhost:7000/api/users/courses');
+        const response = await api.get('users/courses');
         setCourses(response.data);
       } catch (err) {
         console.error('Error fetching courses:', err);
@@ -34,13 +41,36 @@ const CourseList = () => {
     navigate('/');
   };
 
-  const filteredCourses = courses.filter(course =>
+  const handleAddToFavorites = async (course) => {
+    if (!favoritesList.some((item) => item._id === course._id)) {
+      const updatedFavorites = [course, ...favoritesList];
+      setFavoritesList(updatedFavorites);
+
+      // Log the request body to ensure correct data is being sent
+      const payload = { course_id: course.id, user_id: id };
+      console.log("Request payload:", payload);
+
+      await api
+        .post('/users/favs', payload)
+        .then(() => {
+          dispatch(addToFavorites(course));
+          toast.success(`${course.title} added to favorites!`);
+        })
+        .catch((err) => {
+          console.error('Error adding to favorites:', err);
+          toast.error('Failed to add to favorites.');
+        });
+    } else {
+      toast.error('Course already in favorites!');
+    }
+  };
+
+  const filteredCourses = courses.filter((course) =>
     course.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div>
-      {/* Navbar */}
       <div
         style={{
           display: 'flex',
@@ -58,7 +88,7 @@ const CourseList = () => {
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <button
-            onClick={() => setDrawerOpen(!drawerOpen)} // Toggle drawer
+            onClick={() => setDrawerOpen(!drawerOpen)}
             style={{
               backgroundColor: 'transparent',
               color: '#fff',
@@ -103,6 +133,22 @@ const CourseList = () => {
           <div className="me-3">
             <span style={{ fontWeight: 'bold' }}>Hello, {username}</span>
           </div>
+          <Link
+            to="/favorites"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "8px 15px",
+              backgroundColor: "#21D375",
+              color: "#fff",
+              borderRadius: "5px",
+              textDecoration: "none",
+              fontWeight: "bold",
+              marginRight: "10px",
+            }}
+          >
+            <FaHeart style={{ marginRight: "5px" }} /> Cart ({favoritesList.length})
+          </Link>
           <button
             style={{
               backgroundColor: '#dc3545',
@@ -119,7 +165,6 @@ const CourseList = () => {
         </div>
       </div>
 
-      {/* Side Drawer */}
       {drawerOpen && (
         <div
           style={{
@@ -136,7 +181,7 @@ const CourseList = () => {
           }}
         >
           <button
-            onClick={() => setDrawerOpen(false)} // Close drawer
+            onClick={() => setDrawerOpen(false)}
             style={{
               backgroundColor: 'transparent',
               color: '#fff',
@@ -161,14 +206,8 @@ const CourseList = () => {
                 </Link>
               </li>
               <li style={{ marginBottom: '10px' }}>
-                <Link to="/favourites" style={{ color: '#fff', textDecoration: 'none' }}>
-                  Favourites
-                </Link>
-              </li>
-              {/* Feedback as a Button */}
-              <li style={{ marginBottom: '10px' }}>
                 <button
-                  onClick={() => setShowFeedbackModal(true)} // Open feedback modal on click
+                  onClick={() => setShowFeedbackModal(true)}
                   style={{
                     backgroundColor: '#21D375',
                     color: '#fff',
@@ -189,13 +228,11 @@ const CourseList = () => {
         </div>
       )}
 
-      {/* Feedback Modal */}
       <FeedbackModal
         showModal={showFeedbackModal}
-        handleClose={() => setShowFeedbackModal(false)} // Close the modal
+        handleClose={() => setShowFeedbackModal(false)}
       />
 
-      {/* Course List */}
       <div style={{ paddingTop: '80px', paddingBottom: '60px' }}>
         <div
           style={{
@@ -243,22 +280,49 @@ const CourseList = () => {
               >
                 {course.title}
               </h3>
-              <Link
-                to={`/courses/${course._id}`}
+
+              <div
                 style={{
-                  display: 'block',
-                  marginTop: '10px',
-                  padding: '8px 15px',
-                  backgroundColor: '#21D375',
-                  color: '#fff',
-                  textDecoration: 'none',
-                  textAlign: 'center',
-                  borderRadius: '5px',
-                  fontSize: '14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
-                View Details
-              </Link>
+                <Link
+                  to={`/courses/${course._id}`}
+                  style={{
+                    display: 'block',
+                    marginTop: '10px',
+                    padding: '8px 15px',
+                    backgroundColor: '#21D375',
+                    color: '#fff',
+                    textDecoration: 'none',
+                    textAlign: 'center',
+                    borderRadius: '5px',
+                    fontSize: '14px',
+                  }}
+                >
+                  View Details
+                </Link>
+
+                <button
+                  onClick={() => handleAddToFavorites(course)}
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: favoritesList.some((item) => item._id === course._id)
+                      ? '#e74c3c'
+                      : '#ccc',
+                  }}
+                >
+                  {favoritesList.some((item) => item._id === course._id) ? (
+                    <AiFillHeart size={24} />
+                  ) : (
+                    <AiOutlineHeart size={24} />
+                  )}
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { api } from '../axios';
 
 const FeedbackModal = ({ showModal, handleClose }) => {
   const [name, setName] = useState('');
@@ -11,14 +12,14 @@ const FeedbackModal = ({ showModal, handleClose }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:7000/api/users/feedback', {
+      const response = await api.post('users/feedback', {
         name,
         email,
         feedback,
       });
 
       setMessage(response.data.message);
-      handleClose(); // Close the modal after feedback is submitted
+      handleClose();
     } catch (err) {
       console.error(err);
       setMessage('Error submitting feedback');

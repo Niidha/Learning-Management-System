@@ -23,34 +23,34 @@ const footerStyles = {
   width: '100%',
   backgroundColor: '#f8f9fa',
   textAlign: 'center',
-  padding: '10px 0', // Reduced padding
-  boxShadow: '0 -1px 4px rgba(0, 0, 0, 0.1)', // Lighter shadow
+  padding: '10px 0', 
+  boxShadow: '0 -1px 4px rgba(0, 0, 0, 0.1)', 
 }
 
 const footerContentStyles = {
   margin: '0 auto',
-  padding: '0 10px', // Reduced padding
+  padding: '0 10px',
   maxWidth: '1200px',
   color: '#333',
-  fontSize: '14px', // Reduced font size
+  fontSize: '14px', 
 }
 
 const footerLinksStyles = {
   display: 'flex',
   justifyContent: 'center',
-  gap: '10px', // Reduced gap
-  marginBottom: '5px', // Reduced margin
+  gap: '10px',
+  marginBottom: '5px', 
 }
 
 const footerLinkStyles = {
   color: '#007bff',
   textDecoration: 'none',
-  fontSize: '13px', // Reduced font size
+  fontSize: '13px', 
 }
 
 const contactInfoStyles = {
-  fontSize: '12px', // Reduced font size for contact info
-  marginTop: '5px', // Adjusted margin for contact info
+  fontSize: '12px', 
+  marginTop: '5px', 
 }
 
 export default Footer

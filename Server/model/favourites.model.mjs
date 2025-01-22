@@ -1,20 +1,21 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const favSchema = new mongoose.Schema({  
-    
-        userId:{
-            type: mongoose.Types.ObjectId,
-            required:true
-        },
-        courseId:{
-            type: mongoose.Types.ObjectId,
-            require: true
-        }
+const FavoriteSchema = new mongoose.Schema(
+  {
+    user_Id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'students', // Assuming you have a User model with a 'users' collection.
     },
-    {
-        timestamps: true
-    }
-    )
+    course_Id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'courses', // Assuming you have a Course model with a 'courses' collection.
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-
-export const favCollection = mongoose.model("favouritess", favSchema);
+export const favoriteCollection = mongoose.model('favorites', FavoriteSchema);

@@ -1,121 +1,84 @@
+import { favoriteCollection } from "../model/favourites.model.mjs";
 
-import env from "dotenv"
-import { favCollection } from "../model/favourites.model.mjs";
+// Add a course to favorites
+export const addFavorite = async (req, res) => {
+  const { course_id, user_id } = req.body;
 
-env.config();
+  console.log("Request received for adding favorite:", req.body);
 
-const addToFav = async (req, res) => {
-    try {
-        const { user_id, course_id } = req.body;
+  if (!course_id || !user_id) {
+    return res.status(400).json({ message: "course_id and user_id are required." });
+  }
 
-        console.log(user_id, course_id)
-
-        if (!user_id || !course_id) {
-            return res.status(400).send({
-                message: "Bad Request. Missing required fields."
-            });
-        }
-
-        
-        let fav = await favCollection.findOne({ userId: user_id, courseId: course_id });
-
-        if (!fav) {
-           
-            await favCollection.create({ userId: user_id, courseId: course_id });
-            return res.status(201).send({
-                message: "Item added to fav",
-                
-            });
-        }
-
-       
-        const response = await favCollection.updateOne({ userId: user_id, courseId: course_id },{$inc: {quantity: 1}})
-
-        if(response.matchedCount == 1 && response.modifiedCount == 1){
-            return res.status(200).send({
-                message: "Item updated",
-                
-            });
-        }
-
-        return res.status(200).send({
-            message: "No changes",
-            
-        });
-    } catch (err) {
-        console.error(err.message);
-        return res.status(500).send({
-            message: err.message || "Internal server error"
-        });
+  try {
+    // Check if the course is already in favorites
+    const existingFavorite = await favoriteCollection.findOne({ course_id, user_id });
+    if (existingFavorite) {
+      return res.status(400).json({ message: "Course is already in favorites." });
     }
+
+    // Add to favorites
+    const favorite = new favoriteCollection({ course_id, user_id });
+    await favorite.save();
+
+    res.status(201).json({
+      message: "Course added to favorites.",
+      favorite,
+    });
+  } catch (error) {
+    console.error("Error in addFavorite:", error);
+    res.status(500).json({ message: "Error adding course to favorites.", error });
+  }
 };
 
-const getfav = async (req, res) => {
-    try {
-        const { userId } = req.query
+// Get all favorite courses for a user
+export const getFavorites = async (req, res) => {
+  const { user_id } = req.params;
 
-        if (!userId) {
-            return res.status(400).send({
-                message: "Bad Request. Missing userId."
-            })
-        }
+  console.log("Request received for fetching favorites for user:", user_id);
 
-        const fav = await favCollection.findOne({ userId }).populate("items.courseId")
+  if (!user_id) {
+    return res.status(400).json({ message: "user_id is required." });
+  }
 
-        if (!fav) {
-            return res.status(404).send({
-                message: "fav not found"
-            })
-        }
+  try {
+    // Fetch favorites for the user
+    const favorites = await favoriteCollection.find({ user_id }).populate("course_id");
 
-        return res.status(200).send({
-            message: "fav retrieved successfully",
-            fav
-        })
-    } catch (err) {
-        console.error(err.message);
-        return res.status(500).send({
-            message: err.message || "Internal server error"
-        })
+    res.status(200).json({
+      message: "Favorites fetched successfully.",
+      favorites,
+    });
+  } catch (error) {
+    console.error("Error in getFavorites:", error);
+    res.status(500).json({ message: "Error fetching favorites.", error });
+  }
+};
+
+// Remove a course from favorites
+export const removeFavorite = async (req, res) => {
+  const { course_id, user_id } = req.body;
+
+  console.log("Request received for removing favorite:", req.body);
+
+  if (!course_id || !user_id) {
+    return res.status(400).json({ message: "course_id and user_id are required." });
+  }
+
+  try {
+    // Remove the course from favorites
+    const deletedFavorite = await favoriteCollection.findOneAndDelete({ course_id, user_id });
+
+    if (!deletedFavorite) {
+      return res.status(404).json({ message: "Favorite not found." });
     }
-}
 
-
-
-const removeFromfav = async (req, res) => {
-    try {
-        const { userId, courseId } = req.body
-
-        if (!userId || !courseId) {
-            return res.status(400).send({
-                message: "Bad Request. Missing required fields."
-            })
-        }
-
-        const fav = await favCollection.findOne({ userId })
-        if (!fav) {
-            return res.status(404).send({
-                message: "fav not found"
-            })
-        }
-
-        fav.items = fav.items.filter(item => item.courseId !== courseId)
-        await fav.save();
-
-        return res.status(200).send({
-            message: "Item removed from fav",
-            fav
-        })
-    } catch (err) {
-        console.error(err.message);
-        return res.status(500).send({
-            message: err.message || "Internal server error"
-        })
-    }
-}
-
-export default {
-    addToFav,
-    getfav,
-    removeFromfav
-}
+    res.status(200).json({
+      message: "Course removed from favorites.",
+      deletedFavorite,
+    });
+  } catch (error) {
+    console.error("Error in removeFavorite:", error);
+    res.status(500).json({ message: "Error removing course from favorites.", error });
+  }
+};

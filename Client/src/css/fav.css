@@ -1,0 +1,68 @@
+/* General styles for FavoritesPage */
+.favorites-title {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Container to arrange the favorite cards */
+.favorites-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem; /* Space between cards */
+    margin-top: 2rem;
+}
+
+/* Individual card styles */
+.favorites-card {
+    width: 15rem;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.favorites-card:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+}
+
+/* Image styling to ensure consistent size */
+.favorites-image {
+    width: 100%; /* Full width of the card */
+    height: 200px; /* Fixed height */
+    object-fit: cover; /* Ensure the image fits without distortion */
+    border-radius: 8px;
+}
+
+/* Title styling inside the card */
+.favorites-card h6 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button styling */
+.remove-button {
+    background-color: #dc3545; /* Danger red */
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+    transition: background-color 0.2s;
+}

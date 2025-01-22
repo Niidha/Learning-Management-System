@@ -4,6 +4,7 @@ import { Auth } from "../middleware/auth.mjs"
 import { getCourses } from "../controller/course.controller.mjs"
 import { CourseCollection } from "../model/courselist.model.mjs"
 import { FeedbackCollection } from "../model/feedback.model.mjs"
+import { addFavorite, getFavorites, removeFavorite } from "../controller/fav.controller.mjs"
 
 
 
@@ -11,10 +12,13 @@ import { FeedbackCollection } from "../model/feedback.model.mjs"
 const userRoute=Router()
 userRoute.post("/signup",userController.signUp)
 userRoute.post("/login",userController.login)
-userRoute.patch("/update/:userId",updateUser)
-userRoute.get('/courses',getCourses);
-userRoute.get('/:userId', getUserDetails);
-userRoute.get('/courses/:id', async (req, res) => {
+userRoute.patch("/update/:userId",Auth,updateUser)
+userRoute.get('/courses',Auth,getCourses);
+userRoute.get('/:userId',Auth, getUserDetails);
+userRoute.post('/favs',Auth, addFavorite);
+userRoute.get('/favourites/:userId',Auth, getFavorites);
+userRoute.delete('/remove',Auth, removeFavorite);
+userRoute.get('/courses/:id',Auth, async (req, res) => {
     const { id } = req.params;
     try {
       const course = await CourseCollection.findById(id);

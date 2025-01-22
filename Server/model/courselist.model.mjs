@@ -27,16 +27,34 @@ const courseSchema = new Schema({
     }
   ],
   study_materials: {
-    type: String,
-    required: [true, "Study materials are required"]
+    type: [String],
+    required: [true, "Study materials are required"],
+    validate: {
+      validator: function (v) {
+        return v.length > 0;
+      },
+      message: "At least one study material link is required"
+    }
   },
   exercises: {
-    type: String,
-    required: [true, "Exercises are required"]
+    type: [String],
+    required: [true, "Exercises are required"],
+    validate: {
+      validator: function (v) {
+        return v.length > 0;
+      },
+      message: "At least one exercise link is required"
+    }
   },
   tests: {
-    type: String,
-    required: [true, "Tests are required"]
+    type: [String],
+    required: [true, "Tests are required"],
+    validate: {
+      validator: function (v) {
+        return v.length > 0;
+      },
+      message: "At least one test link is required"
+    }
   },
   rating: {
     type: Number,
@@ -49,4 +67,4 @@ const courseSchema = new Schema({
 }, { timestamps: true });
 
 // Create the model for the course collection
-export const CourseCollection = model('Course', courseSchema);
+export const CourseCollection = model('courses', courseSchema);

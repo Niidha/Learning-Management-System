@@ -24,14 +24,14 @@ const userSlice=createSlice({
     }
     
 })
-export const fetchStudentDetails = createAsyncThunk("user/fetchUserDetails", async (userId, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`/api/users/getdetails/${userId}`);
-      return response.data.user;
-    } catch (err) {
-      return rejectWithValue(err.response?.data.message || "Error fetching user details");
-    }
-  });
+// export const fetchStudentDetails = createAsyncThunk("user/fetchUserDetails", async (userId, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get(`/api/users/getdetails/${userId}`);
+//       return response.data.user;
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data.message || "Error fetching user details");
+//     }
+//   });
 export const updateStudentDetails = createAsyncThunk("user/updateUserDetails", async (userDetails, { rejectWithValue }) => {
     try {
       const response = await axios.put(`/api/users/update/${userDetails.id}`, userDetails);

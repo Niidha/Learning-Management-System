@@ -7,7 +7,7 @@ import { Auth } from '../middleware/auth.mjs';
 const courseRoute = Router();
 
 // Route to create a course
-courseRoute.post('/courses',Auth, createCourse);
+courseRoute.post('/courses', createCourse);
 
 // Route to get all courses
 

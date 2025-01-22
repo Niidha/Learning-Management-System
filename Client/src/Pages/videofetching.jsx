@@ -1,81 +1,58 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { api } from '../axios';
 
-const VideoList = () => {
+const VideoListPage = () => {
+  const { courseId, topic } = useParams();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('Data Structure'); // Default search query
 
-  // Fetch videos from the backend
   useEffect(() => {
-    // Fetch videos from the API on component mount
-    axios.get('http://localhost:7000/api/videos')
-      .then(response => {
+    const fetchVideos = async () => {
+      setLoading(true);
+      try {
+        const response = await api.post('/fetch', { query: topic });
         setVideos(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching videos:', error);
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+    fetchVideos();
+  }, [courseId, topic]);
 
-  // Fetch YouTube videos based on search query
-  const fetchYouTubeVideos = () => {
-    setLoading(true);
-    axios.post('http://localhost:7000/api/fetch-videos', { query: searchQuery })
-      .then(response => {
-        console.log('Videos fetched and saved:', response.data);
-        setVideos(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching YouTube videos:', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  // Handle search input change
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  // Handle search form submission
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    fetchYouTubeVideos();
+  const getYouTubeThumbnail = (url) => {
+    const videoId = url.split('v=')[1]?.split('&')[0];
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   };
 
   if (loading) {
-    return <p>Loading videos...</p>;
+    return <p style={loadingStyles}>Loading videos for {topic}...</p>;
   }
 
   if (!Array.isArray(videos) || videos.length === 0) {
-    return <p>No videos available.</p>;
+    return <p style={noVideosStyles}>No videos available for {topic}.</p>;
   }
 
   return (
-    <div>
-      <h1>Top CSE Videos</h1>
-      <form onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Search for videos"
-        />
-        <button type="submit">Search</button>
-      </form>
-      <ul>
-        {videos.map(video => (
-          <li key={video._id}>
-            <h2>{video.title}</h2>
-            <p>Views: {video.views}</p>
-            <p>Likes: {video.likes}</p>
-            <p>Comments: {video.comments}</p>
-            <a href={video.url} target="_blank" rel="noopener noreferrer">Watch Video</a>
+    <div style={containerStyles}>
+      <h1 style={headingStyles}>Videos for {topic}</h1>
+      <ul style={videoListStyles}>
+        {videos.map((video, index) => (
+          <li key={index} style={videoItemStyles}>
+            <img
+              src={getYouTubeThumbnail(video.url)}
+              alt={video.title}
+              style={thumbnailStyles}
+            />
+            <div style={videoInfoStyles}>
+              <h2 style={videoTitleStyles}>{video.title}</h2>
+              <a href={video.url} target="_blank" rel="noopener noreferrer" style={videoLinkStyles}>
+                Watch Video
+              </a>
+            </div>
           </li>
         ))}
       </ul>
@@ -83,4 +60,69 @@ const VideoList = () => {
   );
 };
 
-export default VideoList;
+const containerStyles = {
+  padding: '20px',
+  backgroundColor: '#f8f9fa',
+  minHeight: '100vh',
+};
+
+const headingStyles = {
+  textAlign: 'center',
+  marginBottom: '20px',
+  fontSize: '28px',
+  color: '#333',
+};
+
+const videoListStyles = {
+  listStyleType: 'none',
+  padding: 0,
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+};
+
+const videoItemStyles = {
+  margin: '10px',
+  padding: '15px',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  width: '280px',
+};
+
+const thumbnailStyles = {
+  width: '100%',
+  borderRadius: '4px',
+};
+
+const videoInfoStyles = {
+  marginTop: '10px',
+  textAlign: 'center',
+};
+
+const videoTitleStyles = {
+  fontSize: '18px',
+  color: '#333',
+  margin: '10px 0',
+};
+
+const videoLinkStyles = {
+  color: '#007bff',
+  textDecoration: 'none',
+  fontSize: '16px',
+  transition: 'color 0.3s',
+};
+
+const loadingStyles = {
+  textAlign: 'center',
+  fontSize: '20px',
+  color: '#555',
+};
+
+const noVideosStyles = {
+  textAlign: 'center',
+  fontSize: '20px',
+  color: '#555',
+};
+
+export default VideoListPage;
