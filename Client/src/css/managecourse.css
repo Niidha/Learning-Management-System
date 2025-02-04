@@ -1,0 +1,200 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal-table th, .modal-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.scrollable-description {
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.btn-close {
+  background-color: red;
+  color: white;
+  padding: 20px 20px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.btn-update {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.syllabus-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.syllabus-list li {
+  margin-bottom: 5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+  background-color: #007bff;
+  color: #fff;
+  text-align: left;
+  font-size: 18px;
+}
+
+.btn-view {
+  background-color: #3684d7;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.btn-edit {
+  background-color: #1cc644c3;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.btn-delete {
+  background-color: #f74658;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.btn-update {
+  background-color: #3491f4;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.btn-cancel {
+  background-color: #7f8c8d;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 500px;
+}
+
+.modal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal-table th, .modal-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #343a40;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.drawer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.drawer li {
+  margin-bottom: 10px;
+}
+
+.drawer a {
+  color: white;
+  text-decoration: none;
+}
+
+.drawer a.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.tableCellStyles {
+  border: 1px solid #ddd;
+  padding: 15px 25px;
+  text-align: left;
+  font-size: 16px;
+}

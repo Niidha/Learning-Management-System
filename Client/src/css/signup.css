@@ -1,0 +1,70 @@
+
+.body-login-signup {
+    background-image: url('https://img.freepik.com/premium-vector/e-learning-makes-it-easy-student-learn_4968-681.jpg?w=1380');
+    background-size: cover;
+    background-position: center;
+}
+
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 140px);
+    width: 100%;
+    background-color: rgba(244, 244, 244, 0.8);
+    overflow: hidden;
+}
+
+.signup-form {
+    width: 500px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+}
+
+.input-field {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.input-field:focus {
+    border-color: #007bff;
+}
+
+.select-field {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+    background: white;
+    cursor: pointer;
+}
+
+.signup-btn {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    transition: 0.3s;
+    width: 50%;
+    margin: 0 auto;
+    display: block;
+}
+
+.signup-btn:hover {
+    background-color: #218838;
+}

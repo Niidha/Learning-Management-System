@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 env.config();
 
-// Signup function
+
 const signUp = async (req, res) => {
   try {
     const { body } = req;
@@ -23,14 +23,13 @@ const signUp = async (req, res) => {
       return res.status(400).send({ message: "Bad request" });
     }
     response.password = null;
-    const token = jwt.sign({ sub: response }, process.env.JWT_KEY, { expiresIn: "7d" });
+    const token = jwt.sign({ sub: response }, process.env.JWT_KEY, { expiresIn: "30d" });
     return res.status(201).send({ message: "User created!", user: response, token });
   } catch (err) {
     return res.status(500).send({ message: err.message || "Internal server error" });
   }
 };
 
-// Login function
 export const login = async (req, res) => {
   try {
       const { username, password } = req.body;
@@ -54,28 +53,57 @@ export const login = async (req, res) => {
       return res.status(500).send({ message: err.message || "Internal server error" });
   }
 };
-   
-    export const updateUser = async (req, res) => {
-      try {
-         const {userId}=req.params
-          const { name, password, username, age, qualification, preferredLanguage } = req.body;
   
-          const updatedUser = await studentCollection.findByIdAndUpdate(userId, { name, username,password,age,qualification,preferredLanguage }, { new: true });
-          if (!updatedUser) {
-              return res.status(404).send({ message: "User not found" });
-          }
-  
-          return res.status(200).send({ message: "Profile updated", updatedUser});
-      } catch (err) {
-          return res.status(500).send({ message: err.message || "Internal server error" });
-      }
-  };
+export const updateUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { name, password, username, age, qualification, preferredLanguage } = req.body;
+
+    const user = await studentCollection.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    let hashedPassword;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const updatedUser = await studentCollection.findByIdAndUpdate(
+      userId,
+      {
+        name,
+        username,
+        age,
+        qualification,
+        preferredLanguage,
+        ...(password && { password: hashedPassword }),
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    return res.status(200).send({
+      message: "Profile updated",
+      updatedUser: {
+        ...updatedUser._doc,
+        password: null,
+      },
+    });
+  } catch (err) {
+    return res.status(500).send({ message: err.message || "Internal server error" });
+  }
+};
+
     
   export const getUserDetails = async (req, res) => {
     try {
-      const { userId } = req.params; // User ID from URL params
+      const { userId } = req.params; 
   
-      // Fetch user details by ID
+     
       const user = await studentCollection.findById(userId);
       if (!user) {
         return res.status(404).send({ message: "User not found" });
@@ -86,9 +114,12 @@ export const login = async (req, res) => {
       return res.status(500).send({ message: err.message || "Internal server error" });
     }
   };
+
 export default {
   signUp,
   login,
+  getUserDetails,
+  updateUser
 
 
 };

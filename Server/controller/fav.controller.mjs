@@ -1,24 +1,24 @@
 import { favoriteCollection } from "../model/favourites.model.mjs";
 
-// Add a course to favorites
+
 export const addFavorite = async (req, res) => {
-  const { course_id, user_id } = req.body;
+  const { course_Id, user_Id } = req.body;
 
   console.log("Request received for adding favorite:", req.body);
 
-  if (!course_id || !user_id) {
+  if (!course_Id || !user_Id) {
     return res.status(400).json({ message: "course_id and user_id are required." });
   }
 
   try {
-    // Check if the course is already in favorites
-    const existingFavorite = await favoriteCollection.findOne({ course_id, user_id });
+  
+    const existingFavorite = await favoriteCollection.findOne({ course_Id, user_Id });
     if (existingFavorite) {
       return res.status(400).json({ message: "Course is already in favorites." });
     }
 
-    // Add to favorites
-    const favorite = new favoriteCollection({ course_id, user_id });
+  
+    const favorite = new favoriteCollection({ course_Id, user_Id });
     await favorite.save();
 
     res.status(201).json({
@@ -31,7 +31,7 @@ export const addFavorite = async (req, res) => {
   }
 };
 
-// Get all favorite courses for a user
+
 export const getFavorites = async (req, res) => {
   const { user_id } = req.params;
 
@@ -42,7 +42,7 @@ export const getFavorites = async (req, res) => {
   }
 
   try {
-    // Fetch favorites for the user
+  
     const favorites = await favoriteCollection.find({ user_id }).populate("course_id");
 
     res.status(200).json({
@@ -55,30 +55,18 @@ export const getFavorites = async (req, res) => {
   }
 };
 
-// Remove a course from favorites
-export const removeFavorite = async (req, res) => {
-  const { course_id, user_id } = req.body;
-
-  console.log("Request received for removing favorite:", req.body);
-
-  if (!course_id || !user_id) {
-    return res.status(400).json({ message: "course_id and user_id are required." });
-  }
-
+export const removeFromFavorite = async (req, res) => {
   try {
-    // Remove the course from favorites
-    const deletedFavorite = await favoriteCollection.findOneAndDelete({ course_id, user_id });
+      const { course_id,user_id } = req.body;
+   ;
 
-    if (!deletedFavorite) {
-      return res.status(404).json({ message: "Favorite not found." });
-    }
+      const favoriteItem = await favoriteCollection.findOneAndDelete({course_id,user_id  });
+      if (!favoriteItem) {
+          return res.status(404).send({ message: "Course not found in favorite" });
+      }
 
-    res.status(200).json({
-      message: "Course removed from favorites.",
-      deletedFavorite,
-    });
-  } catch (error) {
-    console.error("Error in removeFavorite:", error);
-    res.status(500).json({ message: "Error removing course from favorites.", error });
+      return res.status(200).send({ message: "Course removed from favorite" });
+  } catch (err) {
+      return res.status(500).send({ message: err.message || "Internal server error" });
   }
 };

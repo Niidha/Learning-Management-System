@@ -1,10 +1,10 @@
 /* Global Styles */
-body {
+/* body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffffff;
     padding: 20px;
   }
-  
+   */
   .container {
     width: 2000px;
     margin: 0 auto;
@@ -158,4 +158,47 @@ body {
     text-align: center;
     color: #333;
   }
-  
+ /* Ensure the labels and inputs are aligned in a row */
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-right: 15px; /* Space between label and input field */
+  width: 30%; /* Set the width of the label */
+}
+
+.input-group input {
+  width: 65%; /* Set the width of the input field */
+  padding: 10px;
+}
+
+.horizontal-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.trash-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.add-btn {
+  margin-top: 10px;
+  align-self: flex-end; /* Position the "Add" button to the right */
+
+  color: rgb(21, 19, 19);
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}

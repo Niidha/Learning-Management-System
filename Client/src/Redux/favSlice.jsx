@@ -14,8 +14,8 @@ const favoritesSlice = createSlice({
       }
     },
     removeFromFavorites: (state, action) => {
-      const itemId = action.payload;
-      state.items = state.items.filter((item) => item.id !== itemId);
+      const courseId = action.payload;
+      state.items = state.items.filter((item) => item.id !== courseId);
     },
   },
 });

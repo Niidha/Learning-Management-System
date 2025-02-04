@@ -84,16 +84,20 @@ const modalStyles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
+    zIndex: 1050, // Ensure it's above other elements like drawer
+  }
+  ,
   modal: {
     backgroundColor: '#fff',
     padding: '20px',
     borderRadius: '8px',
     width: '400px',
     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+    
   },
   formGroup: {
     marginBottom: '15px',
+    
   },
   input: {
     width: '100%',

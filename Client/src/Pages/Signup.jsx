@@ -1,15 +1,44 @@
-import React from 'react'
-import { useFormik } from "formik"
-import { api } from '../axios'
-import { useNavigate } from 'react-router'
-import toast from 'react-hot-toast'
-import { useDispatch } from 'react-redux'
-import { createUser } from '../Redux/userSlice'
+import React from 'react';
+import { useFormik } from "formik";
+import { api } from '../axios';
+import { useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { createUser } from '../Redux/userSlice';
+import * as Yup from 'yup';
+import "../css/signup.css";  
 
 const Signup = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const validationSchema = Yup.object({
+        name: Yup.string()
+            .required("Name is required")
+            .min(3, "Name must be at least 3 characters")
+            .max(50, "Name cannot be longer than 50 characters"),
+        
+        username: Yup.string()
+            .required("Username is required")
+            .min(3, "Username must be at least 3 characters")
+            .max(30, "Username cannot be longer than 30 characters"),
+        
+        email: Yup.string()
+            .required("Email is required")
+            .email("Invalid email format"),
+        
+        password: Yup.string()
+            .required("Password is required")
+            .min(8, "Password must be at least 8 characters")
+            .matches(/[a-zA-Z0-9]/, "Password can only contain letters and numbers"),
+        
+        confirm_password: Yup.string()
+            .required("Confirm Password is required")
+            .oneOf([Yup.ref('password'), null], "Passwords must match"),
+
+        role: Yup.string()
+            .required("Role selection is required")
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -17,110 +46,111 @@ const Signup = () => {
             username: "",
             email: "",
             password: "",
-            confirm_password: ""
+            confirm_password: "",
+            role: "student"
         },
-
+        validationSchema,
         onSubmit: async (values) => {
             try {
-                // Send the basic details to the backend
-                const { data } = await api.post("/users/signup", values)
-                console.log(data.token)
+                const { data } = await api.post("/users/signup", values);
+                localStorage.setItem("access_token", data.token);
+                dispatch(createUser(data.user));
+                toast.success("Account Created");
 
-                // Store the token in localStorage
-                localStorage.setItem("access_token", data.token)
-
-                // Dispatch user data to the Redux store
-                dispatch(createUser(data.user))
-
-                // Notify user that account is created
-                toast.success("Account Created")
-
-                // Navigate to the student details page to fill additional info
-                navigate("/courses")
+                if (values.role === "admin") {
+                    navigate("/admin-dashboard");
+                } else if (values.role === "provider") {
+                    navigate("/provider-dashboard");
+                } else {
+                    navigate("/courses");
+                }
             } catch (err) {
-                toast.error(err.response?.data.message || err.message)
-                console.log(err.message)
+                toast.error(err.response?.data.message || err.message);
             }
+        },
+        
+        validateOnBlur: false,
+        validateOnChange: false,
+        validate: (values) => {
+            const errors = {};
+            validationSchema
+                .validate(values, { abortEarly: false })
+                .then(() => {})
+                .catch((err) => {
+                    err.inner.forEach((error) => {
+                        errors[error.path] = error.message;
+                        toast.error(error.message); 
+                    });
+                });
+            return errors;
         }
-    })
+    });
 
     return (
-        <div style={containerStyles}>
-            <form onSubmit={formik.handleSubmit} style={formStyles}>
+        <div className="signup-container">
+            <form onSubmit={formik.handleSubmit} className="signup-form">
+                <h2 className="form-title">Signup</h2>
                 <input
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.name}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="text"
-                    name='name'
-                    placeholder='Enter name'
+                    name="name"
+                    placeholder="Enter name"
                 />
                 <input
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.username}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="text"
-                    name='username'
-                    placeholder='Enter username'
+                    name="username"
+                    placeholder="Enter username"
                 />
                 <input
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.email}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="text"
-                    name='email'
-                    placeholder='Enter email'
+                    name="email"
+                    placeholder="Enter email"
                 />
                 <input
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.password}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="password"
-                    name='password'
-                    placeholder='Enter password'
+                    name="password"
+                    placeholder="Enter password"
                 />
                 <input
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.confirm_password}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="password"
-                    name='confirm_password'
-                    placeholder='Re-enter password'
+                    name="confirm_password"
+                    placeholder="Re-enter password"
                 />
-                <button className='btn btn-success w-100' type='submit'>Create Account</button>
+                <select
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.role}
+                    className="select-field"
+                    name="role"
+                >
+                    <option value="student">Student</option>
+                    <option value="provider">Provider</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+                <button className="signup-btn w-50" type="submit">Create Account</button>
             </form>
         </div>
-    )
-}
+    );
+};
 
-const containerStyles = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    marginTop: '-10vh',  // Moves the form upwards
-}
-
-const formStyles = {
-    width: '400px',
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-}
-
-const inputStyles = {
-    borderRadius: '5px',
-    border: '1px solid #ced4da',
-    fontSize: '16px',
-}
-
-export default Signup
+export default Signup;

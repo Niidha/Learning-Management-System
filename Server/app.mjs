@@ -5,6 +5,7 @@ import userRoute from "./routes/user.route.mjs"
 import dbConnect from "./config/db.config.mjs"
 import VideoRoute from "./routes/video.route.mjs"
 import courseRoute from "./routes/course.route.mjs"
+import adminRoute from "./routes/admin.route.mjs"
 
 
 env.config()
@@ -16,6 +17,7 @@ app.use("/api/users",userRoute)
 app.use('/api', VideoRoute)
 app.use('/api', courseRoute)
 
+app.use('/api/admin', adminRoute)
 
 
 

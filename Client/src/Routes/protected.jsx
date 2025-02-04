@@ -5,11 +5,11 @@ export const ProtectedRoute=({children,auth=false})=>{
         if(auth){
             return children
         }else{
-         return <Navigate to={"/login"}/>
+         return <Navigate to={"/"}/>
         }
     }else{
         if(auth){
-            return <Navigate to={"/"}/>
+            return <Navigate to={"/courses"}/>
         }else{
             return children
         }

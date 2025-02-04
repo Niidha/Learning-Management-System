@@ -1,9 +1,6 @@
-// controllers/video.controller.js
 import ytSearch from 'yt-search';
-
 import { VideoCollection } from '../model/video.model.mjs';
 
-// Function to fetch YouTube videos based on a search query
 const fetchYouTubeVideos = async (query, maxResults = 5) => {
   try {
     const result = await ytSearch(query);
@@ -20,7 +17,6 @@ const fetchYouTubeVideos = async (query, maxResults = 5) => {
   }
 };
 
-// Controller to fetch and save YouTube videos to the database
 export const fetchVideos = async (req, res) => {
   const { query } = req.body;
   try {
@@ -32,7 +28,6 @@ export const fetchVideos = async (req, res) => {
   }
 };
 
-// Controller to get all videos sorted by rankScore
 export const getVideos = async (req, res) => {
   try {
     const videos = await VideoCollection.find().sort({ rankScore: -1 });

@@ -1,0 +1,373 @@
+/* CourseDetail.css */
+.course-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    overflow: hidden;
+    margin-bottom: 10vh;
+  }
+  
+  .course-content {
+    padding: 50px 30px;
+    max-width: 1000px;
+    margin: 50px 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
+  }
+  
+  .course-image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .course-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .course-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .course-description {
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: #555;
+  }
+  
+  .edit-btn {
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  /* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    padding: 20px;
+  }
+  
+  .container {
+    width: 2000px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card Styles */
+  .card {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Viewing Details Box */
+  .card-body ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 8px 0;
+   text-align: left;
+  }
+  
+  
+  .card-body ul li strong {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Form Group Styling for Horizontal Layout */
+  .form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .form-group label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    display: inline-block;
+    margin-right: 20px;
+    width: 30%;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 65%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Input Alignment for the Age Section */
+  .form-group input[type="number"] {
+    display: inline-block;
+    width: auto;
+    max-width: 70px;
+    text-align: center;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .input-group button {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .input-group button:hover {
+    background-color: #e2e6ea;
+  }
+  
+  /* Submit Button Styling */
+  button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 15%;
+    transition: background-color 0.3s ease;
+   
+    
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+    
+  }
+  
+  /* List Styling for Details Section */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  ul li strong {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Error & Loading Messages */
+  .error {
+    color: #ff4d4f;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+  
+  .loading {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+  }
+ /* Ensure the labels and inputs are aligned in a row */
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-right: 15px; /* Space between label and input field */
+  width: 30%; /* Set the width of the label */
+}
+
+.input-group input {
+  width: 65%; /* Set the width of the input field */
+  padding: 10px;
+}
+
+.horizontal-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.trash-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.add-btn {
+  margin-top: 10px;
+  align-self: flex-end; /* Position the "Add" button to the right */
+
+  color: rgb(21, 19, 19);
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+}
+/* Container styles */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  overflow: hidden;
+  margin-bottom: 10vh;
+}
+
+/* Link styles */
+.link {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Content styles */
+.content {
+  padding: 50px 30px; /* Increased padding on top and sides */
+  max-width: 1000px;
+  margin: 50px 15px; /* Increased top margin for more space */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll; /* Enables scrolling but hides scrollbar */
+  height: 100%; /* Ensure content area takes full height for scrolling */
+}
+
+/* Image container */
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Image styles */
+.image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styles */
+.title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Description styles */
+.description {
+  font-size: 18px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Section styles */
+.section {
+  margin-bottom: 20px;
+}
+
+/* Table styles */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+/* Table header */
+.table-header {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Table cell */
+.table-cell {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Link styles */
+.link-style {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.link-style:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Edit button style */
+.edit-button {
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}

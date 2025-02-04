@@ -2,7 +2,6 @@ import { model, Schema } from 'mongoose';
 
 const studentSchema = new Schema(
   {
-    // Basic login details
     name: {
       type: String,
       required: [true, 'Name is required'],
@@ -21,12 +20,6 @@ const studentSchema = new Schema(
       type: String,
       required: [true, 'Password is required'],
     },
-    
-    // Additional student details (can be filled later)
-    // fullName: {
-    //   type: String,
-    //   required: false,
-    // },
     age: {
       type: Number,
       required: false,
@@ -39,8 +32,14 @@ const studentSchema = new Schema(
       type: String,
       required: false,
     },
+    role: {
+      type: String,
+      enum: ['admin', 'provider', 'student'], 
+      default: 'student',
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-export const studentCollection = model('students', studentSchema);
+export const studentCollection = model('users', studentSchema);

@@ -1,0 +1,138 @@
+/* General container */
+.announcement-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title */
+  .title {
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Form box */
+  .form-box {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .form-box h3 {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  textarea {
+    height: 80px;
+    resize: none;
+  }
+  
+  .create-btn {
+    background: #007bff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  .create-btn:hover {
+    background: #0056b3;
+  }
+  
+  /* Toggle button */
+  .toggle-btn {
+    background: #21D375;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .toggle-btn:hover {
+    background: #1aaf61;
+  }
+  
+  /* Table Styling */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background: #f4f4f4;
+  }
+  
+  .action-buttons {
+    text-align: center;
+  }
+  
+  .delete-btn {
+    background: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .delete-btn:hover {
+    background: #a71d2a;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .announcement-container {
+      width: 90%;
+      padding: 15px;
+    }
+  
+    input, textarea {
+      font-size: 12px;
+    }
+  
+    .create-btn, .toggle-btn {
+      font-size: 14px;
+    }
+  
+    th, td {
+      font-size: 12px;
+    }
+  }
+  

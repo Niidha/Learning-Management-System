@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
 
-// Define the schema for the course
 const courseSchema = new Schema({
   title: {
     type: String,
@@ -19,10 +18,6 @@ const courseSchema = new Schema({
       topic: {
         type: String,
         required: [true, "Topic is required"]
-      },
-      video_link: {
-        type: String,
-        required: [true, "Video link is required"]
       }
     }
   ],
@@ -66,5 +61,5 @@ const courseSchema = new Schema({
   }
 }, { timestamps: true });
 
-// Create the model for the course collection
+
 export const CourseCollection = model('courses', courseSchema);

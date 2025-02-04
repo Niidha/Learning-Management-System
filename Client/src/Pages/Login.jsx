@@ -1,14 +1,15 @@
-import React from 'react'
-import { useFormik } from "formik"
-import { api } from '../axios'
-import { useNavigate } from 'react-router'
-import { useDispatch } from "react-redux"
-import toast from 'react-hot-toast'
-import { createUser } from '../Redux/userSlice'
+import React from 'react';
+import { useFormik } from "formik";
+import { api } from '../axios';
+import { useNavigate } from 'react-router';
+import { useDispatch } from "react-redux";
+import toast from 'react-hot-toast';
+import { createUser } from '../Redux/userSlice';
+import "../css/login.css";  
 
 const Login = () => {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -19,84 +20,66 @@ const Login = () => {
             try {
                 const { data } = await api.post("/users/login", values);
                 
-                const { userId, token } = data;
+                const { userId, token, user } = data;
 
-                localStorage.setItem("userId", userId); 
-                localStorage.setItem("access_token", token); 
-                
-                dispatch(createUser(data.user))
-                toast.success("Logged In")
-                navigate("/courses")
+               
+                localStorage.setItem("userId", userId);
+                localStorage.setItem("access_token", token);
+
+                dispatch(createUser(user)); 
+                toast.success("Logged In");
+
+               
+                switch (user.role) {
+                    case "admin":
+                        navigate("/admin-dashboard");
+                        break;
+                    case "provider":
+                        navigate("/provider-dashboard");
+                        break;
+                    case "student":
+                    default:
+                        navigate("/courses");
+                        break;
+                }
             } catch (err) {
-                console.log(err.message);
-                toast.error("Login failed. Please try again.");
+                console.error(err.message);
+                toast.error(err.response?.data.message || "Login failed. Please try again.");
             }
         }
-    })
+    });
 
     return (
-        <div style={containerStyles}>
-            <form onSubmit={formik.handleSubmit} style={formStyles}>
+        <div className="login-container">
+            <form onSubmit={formik.handleSubmit} className="login-form">
+                <h2 className="form-title">Login</h2>
                 <input
                     onChange={formik.handleChange}
                     value={formik.values.username}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="text"
-                    name='username'
-                    placeholder='Enter username'
+                    name="username"
+                    placeholder="Enter username"
                 />
                 <input
                     onChange={formik.handleChange}
                     value={formik.values.password}
-                    className='p-3'
-                    style={inputStyles}
+                    className="input-field"
                     type="password"
-                    name='password'
-                    placeholder='Enter password'
+                    name="password"
+                    placeholder="Enter password"
                 />
-                <button className='btn btn-success w-100' type='submit'>Login</button>
+                <button className="btn login-btn w-100" type="submit">Login</button>
                 <button
-                    className='btn btn-secondary w-100 mt-2'
-                    type='button'
+                    className="btn signup-btn w-100"
+                    type="button"
                     onClick={() => navigate('/signup')}
                 >
                     Signup
                 </button>
-                <button
-                    className='btn btn-info w-100 mt-2'
-                    type='button'
-                    onClick={() => navigate('/addcourse')}
-                >
-                    Add Course
-                </button>
             </form>
         </div>
-    )
+    );
 }
 
-const containerStyles = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-}
-
-const formStyles = {
-    width: '400px',
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-}
-
-const inputStyles = {
-    borderRadius: '5px',
-    border: '1px solid #ced4da',
-    fontSize: '16px',
-}
-
-export default Login
+export default Login;

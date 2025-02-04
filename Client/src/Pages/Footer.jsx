@@ -1,19 +1,22 @@
-import React from 'react'
+import React from 'react';
 
 const Footer = () => {
   return (
     <footer style={footerStyles}>
       <div style={footerContentStyles}>
-        <p>&copy; 2025 SmartLearn. All rights reserved.</p>
+        <p style={footerTextStyles}>&copy; 2025 SmartLearn. All rights reserved.</p>
         <div style={footerLinksStyles}>
           <a href="/privacy-policy" style={footerLinkStyles}>Privacy Policy</a>
           <a href="/terms-of-service" style={footerLinkStyles}>Terms of Service</a>
           <a href="/contact" style={footerLinkStyles}>Contact Us</a>
         </div>
-        <p style={contactInfoStyles}>Contact: +123-456-7890 | Email: support@smartlearn.com</p>
+        <div style={contactInfoStyles}>
+          <p style={contactTextStyles}>Contact: +91-860-613-5965</p>
+          <p style={contactTextStyles}>Email: 20git05@meaec.edu.in</p>
+        </div>
       </div>
     </footer>
-  )
+  );
 }
 
 const footerStyles = {
@@ -21,36 +24,55 @@ const footerStyles = {
   bottom: 0,
   left: 0,
   width: '100%',
-  backgroundColor: '#f8f9fa',
+  backgroundColor: '#2C3E50',
+  color: '#ecf0f1',
+  padding: '10px 0',  // Reduced padding for smaller height
   textAlign: 'center',
-  padding: '10px 0', 
-  boxShadow: '0 -1px 4px rgba(0, 0, 0, 0.1)', 
+  boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.1)',
+  zIndex: '9999',
+  overflow: 'hidden',  // Prevent scrollbars from appearing
 }
 
 const footerContentStyles = {
-  margin: '0 auto',
-  padding: '0 10px',
   maxWidth: '1200px',
-  color: '#333',
-  fontSize: '14px', 
+  margin: '0 auto',
+  padding: '0 20px',
+  overflow: 'hidden',  // Ensure content doesn't overflow horizontally
+}
+
+const footerTextStyles = {
+  fontSize: '12px',  // Reduced font size
+  marginBottom: '5px',  // Reduced margin
+  fontWeight: '400',
 }
 
 const footerLinksStyles = {
   display: 'flex',
   justifyContent: 'center',
-  gap: '10px',
-  marginBottom: '5px', 
+  gap: '15px',  // Reduced gap between links
+  marginBottom: '5px',  // Reduced margin between links and contact info
 }
 
 const footerLinkStyles = {
-  color: '#007bff',
+  color: '#ecf0f1',
   textDecoration: 'none',
-  fontSize: '13px', 
+  fontSize: '12px',  // Reduced font size
+  fontWeight: '500',
+  transition: 'color 0.3s ease',
+}
+
+footerLinkStyles[':hover'] = {
+  color: '#3498DB',
 }
 
 const contactInfoStyles = {
-  fontSize: '12px', 
-  marginTop: '5px', 
+  marginTop: '5px',  // Reduced margin-top
+  fontSize: '10px',  // Reduced font size
+  fontWeight: '300',
 }
 
-export default Footer
+const contactTextStyles = {
+  marginBottom: '3px',  // Reduced margin-bottom
+}
+
+export default Footer;

@@ -1,4 +1,4 @@
-// models/video.model.js
+
 import {model,Schema} from 'mongoose';
 
 const videoSchema = new Schema({
