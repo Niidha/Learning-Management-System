@@ -33,7 +33,7 @@ export const getUserById = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try {
-        const user = await studentCollection.findByIdAndUpdate(
+        const user = await studentCollection.findByIdAndDelete(
             req.params.id,
             { status: 'disabled' },  // Update the status to 'disabled'
             { new: true }  // Return the updated user

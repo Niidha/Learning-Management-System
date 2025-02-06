@@ -1,61 +1,71 @@
-/* CourseDetail.css */
-.course-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    background-color: #f8f9fa;
-    overflow: hidden;
-    margin-bottom: 10vh;
-  }
-  
-  .course-content {
-    padding: 50px 30px;
-    max-width: 1000px;
-    margin: 50px 15px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow-y: scroll;
-  }
-  
-  .course-image-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .course-image {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .course-title {
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    margin: 10px 0;
-    color: #333;
-  }
-  
-  .course-description {
-    font-size: 18px;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    color: #555;
-  }
-  
-  .edit-btn {
-    color: black;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  /* Global Styles */
+/* 
+.coursedetail-box-can {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+.coursedetail-box {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1200px;
+}
+
+.coursedetail-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.coursedetail-description {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.section {
+  margin-top: 30px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header {
+  padding: 10px;
+  text-align: left;
+  background-color: #f4f4f4;
+}
+
+.table-cell {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.link-style {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.link-style:hover {
+  text-decoration: underline;
+}
+
+.edit-btn {
+  background-color: #100606;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #ffffff;
@@ -370,4 +380,4 @@ body {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-}
+} */

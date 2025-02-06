@@ -18,4 +18,4 @@ const FavoriteSchema = new mongoose.Schema(
   }
 );
 
-export const favoriteCollection = mongoose.model('favorites', FavoriteSchema);
+export const favoriteCollection = mongoose.model('fav', FavoriteSchema);

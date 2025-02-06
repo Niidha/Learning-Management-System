@@ -43,7 +43,7 @@ const MainNavbar = () => {
           <FiSearch className="search-icon" style={{
               position: 'absolute',
               top: '50%',
-              left: '19%',
+              left: '16%',
               transform: 'translateY(-50%)',
               color: '#6c757d',
             }} />

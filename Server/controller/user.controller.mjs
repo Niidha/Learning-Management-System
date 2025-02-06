@@ -5,8 +5,6 @@ import { studentCollection } from "../model/user.model.mjs";
 import mongoose from "mongoose";
 
 env.config();
-
-
 const signUp = async (req, res) => {
   try {
     const { body } = req;

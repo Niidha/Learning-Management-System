@@ -166,25 +166,28 @@ const UsersPage = () => {
   }, []);
 
   const handleDelete = (id) => {
-    setUserToDelete(id);
-    setShowDeleteModal(true);
+    setUserToDelete(id);  // Set the user to delete
+    setShowDeleteModal(true);  // Show the confirmation modal
   };
-
+  
   const confirmDelete = () => {
     if (userToDelete) {
+      // Call API to delete the user
       api.delete(`/admin/user/${userToDelete}`)
         .then(() => {
+          // Remove user from the local state after successful deletion
           setUsers(users.filter(user => user._id !== userToDelete));
-          setShowDeleteModal(false);
-          setUserToDelete(null);
-          toast.success("User deleted successfully!");
+          setShowDeleteModal(false);  // Close the modal
+          setUserToDelete(null);  // Reset the user to delete
+          toast.success("User deleted successfully!");  // Show success message
         })
         .catch((err) => {
           console.error("Error deleting user:", err);
-          toast.error("Failed to delete user!");
+          toast.error("Failed to delete user!");  // Show error message in case of failure
         });
     }
   };
+  
 
   const cancelDelete = () => {
     setShowDeleteModal(false);

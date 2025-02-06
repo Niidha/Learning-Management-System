@@ -38,6 +38,10 @@ const studentSchema = new Schema(
       default: 'student',
       required: true,
     },
+    status:{
+      type:String,
+      required:false
+    }
   },
   { timestamps: true }
 );
