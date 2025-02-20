@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { api } from '../axios';
 
 const FeedbackModal = ({ showModal, handleClose }) => {
@@ -29,43 +28,43 @@ const FeedbackModal = ({ showModal, handleClose }) => {
   if (!showModal) return null;
 
   return (
-    <div style={modalStyles.overlay}>
-      <div style={modalStyles.modal}>
-        <h3>Feedback</h3>
-        {message && <p>{message}</p>}
+    <div style={styles.overlay}>
+      <div style={styles.modal}>
+        <h3 style={styles.title}>Feedback</h3>
+        {message && <p style={styles.message}>{message}</p>}
         <form onSubmit={handleSubmit}>
-          <div style={modalStyles.formGroup}>
-            <label>Name:</label>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Name:</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              style={modalStyles.input}
+              style={styles.input}
             />
           </div>
-          <div style={modalStyles.formGroup}>
-            <label>Email:</label>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Email:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={modalStyles.input}
+              style={styles.input}
             />
           </div>
-          <div style={modalStyles.formGroup}>
-            <label>Feedback:</label>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Feedback:</label>
             <textarea
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               required
-              style={modalStyles.textarea}
+              style={styles.textarea}
             />
           </div>
-          <div style={modalStyles.buttonGroup}>
-            <button type="submit" style={modalStyles.submitButton}>Submit</button>
-            <button type="button" onClick={handleClose} style={modalStyles.closeButton}>Close</button>
+          <div style={styles.buttonGroup}>
+            <button type="submit" style={styles.submitButton}>Submit</button>
+            <button type="button" onClick={handleClose} style={styles.closeButton}>Close</button>
           </div>
         </form>
       </div>
@@ -73,7 +72,8 @@ const FeedbackModal = ({ showModal, handleClose }) => {
   );
 };
 
-const modalStyles = {
+// Responsive Styles
+const styles = {
   overlay: {
     position: 'fixed',
     top: '0',
@@ -84,20 +84,34 @@ const modalStyles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1050, // Ensure it's above other elements like drawer
-  }
-  ,
+    zIndex: 1050,
+    padding: '10px', // Ensures space on small screens
+  },
   modal: {
     backgroundColor: '#fff',
     padding: '20px',
     borderRadius: '8px',
-    width: '400px',
+    width: '90%',
+    maxWidth: '450px',
     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-    
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: '1.5rem',
+    marginBottom: '10px',
+  },
+  message: {
+    color: 'green',
+    fontSize: '14px',
+    marginBottom: '10px',
   },
   formGroup: {
     marginBottom: '15px',
-    
+    textAlign: 'left',
+  },
+  label: {
+    fontSize: '14px',
+    fontWeight: 'bold',
   },
   input: {
     width: '100%',
@@ -105,6 +119,7 @@ const modalStyles = {
     marginTop: '5px',
     borderRadius: '5px',
     border: '1px solid #ccc',
+    fontSize: '14px',
   },
   textarea: {
     width: '100%',
@@ -113,27 +128,34 @@ const modalStyles = {
     borderRadius: '5px',
     border: '1px solid #ccc',
     minHeight: '100px',
+    fontSize: '14px',
   },
   buttonGroup: {
     display: 'flex',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
+    gap: '10px',
+    marginTop: '10px',
   },
   submitButton: {
     backgroundColor: '#21D375',
     color: '#fff',
-    padding: '10px 20px',
+    padding: '10px',
     borderRadius: '5px',
     border: 'none',
     cursor: 'pointer',
-    width:'30%'
+    flex: '1',
+    minWidth: '120px',
   },
   closeButton: {
     backgroundColor: '#dc3545',
     color: '#fff',
-    padding: '10px 20px',
+    padding: '10px',
     borderRadius: '5px',
     border: 'none',
     cursor: 'pointer',
+    flex: '1',
+    minWidth: '120px',
   },
 };
 

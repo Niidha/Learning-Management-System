@@ -41,34 +41,23 @@ const FavoritesPage = () => {
 
   return (
     <React.Fragment>
-      <Navbar /> {/* Add the Navbar component here */}
-      <h3 style={{ textAlign: 'center', margin: '20px 0', paddingTop: '50px' }}>
-        Favorites List
-      </h3>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', padding: '20px', justifyContent: 'center' }}>
+      <Navbar />
+      <h3 style={styles.heading}>Favorites List</h3>
+      <div style={styles.container}>
         {favoritesList.length > 0 ? (
           favoritesList.map(course => (
-            <div key={course._id} style={{
-              display: 'flex', flexDirection: 'row', alignItems: 'center',
-              border: '1px solid #ddd', borderRadius: '8px', padding: '20px',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)', width: '600px', textAlign: 'center',
-            }}>
-              <img src={course.image} alt={course.title} style={{
-                width: '200px', height: '200px', objectFit: 'cover',
-                borderRadius: '8px', marginRight: '20px'
-              }} />
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: 1 }}>
-                <h6 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '10px', marginBottom: '10px', textAlign: 'left', color: '#333', lineHeight: '1.5' }}>
-                  {course.title}
-                </h6>
-                <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '10px', marginTop: '15px' }}>
+            <div key={course._id} style={styles.card}>
+              <img src={course.image} alt={course.title} style={styles.image} />
+              <div style={styles.content}>
+                <h6 style={styles.title}>{course.title}</h6>
+                <div style={styles.buttons}>
                   <button
                     onClick={() => handleRemoveFromFavorites(course._id, course.title)}
-                    style={{ padding: '8px 15px', fontSize: '14px', cursor: 'pointer', borderRadius: '5px', backgroundColor: '#f44336', color: 'white', border: 'none' }}
+                    style={styles.removeButton}
                   >
                     <FaTrash /> Remove
                   </button>
-                  <Link to={`/courses/${course._id}`} style={{ padding: '8px 15px', fontSize: '14px', cursor: 'pointer', borderRadius: '5px', backgroundColor: '#21D375', color: 'white', textDecoration: 'none' }}>
+                  <Link to={`/courses/${course._id}`} style={styles.viewButton}>
                     View Details
                   </Link>
                 </div>
@@ -76,13 +65,101 @@ const FavoritesPage = () => {
             </div>
           ))
         ) : (
-          <p style={{ textAlign: 'center', color: '#777' }}>No favorite courses added yet.</p>
+          <p style={styles.noFavorites}>No favorite courses added yet.</p>
         )}
       </div>
 
       <FeedbackModal showModal={showFeedbackModal} handleClose={() => setShowFeedbackModal(false)} />
     </React.Fragment>
   );
+};
+
+// Styles for responsiveness
+const styles = {
+  heading: {
+    textAlign: 'center',
+    margin: '20px 0',
+    paddingTop: '50px',
+    fontSize: '1.8rem',
+    color: '#333',
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '20px',
+    padding: '20px',
+    justifyContent: 'center',
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    padding: '20px',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+    width: '100%',
+    maxWidth: '600px',
+    textAlign: 'center',
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: '100%',
+    maxWidth: '400px',
+    height: 'auto',
+    objectFit: 'cover',
+    borderRadius: '8px',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 1,
+    width: '100%',
+    padding: '10px 0',
+  },
+  title: {
+    fontSize: '1.2rem',
+    fontWeight: 'bold',
+    marginTop: '10px',
+    marginBottom: '10px',
+    textAlign: 'center',
+    color: '#333',
+    lineHeight: '1.5',
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '10px',
+    marginTop: '15px',
+  },
+  removeButton: {
+    padding: '8px 15px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+    backgroundColor: '#f44336',
+    color: 'white',
+    border: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+  },
+  viewButton: {
+    padding: '8px 15px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+    backgroundColor: '#21D375',
+    color: 'white',
+    textDecoration: 'none',
+    textAlign: 'center',
+  },
+  noFavorites: {
+    textAlign: 'center',
+    color: '#777',
+    fontSize: '1.2rem',
+  },
 };
 
 export default FavoritesPage;

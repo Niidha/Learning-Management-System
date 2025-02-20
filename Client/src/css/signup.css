@@ -1,22 +1,28 @@
-
+/* Background Styling */
 .body-login-signup {
-    background-image: url('https://img.freepik.com/premium-vector/e-learning-makes-it-easy-student-learn_4968-681.jpg?w=1380');
-    background-size: cover;
-    background-position: center;
+    background: url('https://img.freepik.com/premium-vector/e-learning-makes-it-easy-student-learn_4968-681.jpg?w=1380') no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
+/* Signup Container */
 .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 140px);
     width: 100%;
-    background-color: rgba(244, 244, 244, 0.8);
-    overflow: hidden;
+    min-height: 100vh;
+    padding-inline: 10%;
+    
+    overflow: auto; /* Allows scrolling if content overflows */
 }
 
+/* Signup Form (Fixed Width) */
 .signup-form {
-    width: 500px;
+    width: 500px; /* Fixed width for all screen sizes */
     background: rgba(255, 255, 255, 0.7);
     padding: 30px;
     border-radius: 8px;
@@ -25,8 +31,11 @@
     flex-direction: column;
     gap: 15px;
     text-align: center;
+    overflow-y: auto; /* Scrollbar if content is too large */
+    max-height: 90vh; /* Prevents overflow on very small screens */
 }
 
+/* Input Fields */
 .input-field {
     padding: 12px;
     border-radius: 5px;
@@ -37,10 +46,12 @@
     transition: border 0.2s;
 }
 
+/* Focus Effect */
 .input-field:focus {
     border-color: #007bff;
 }
 
+/* Select Field */
 .select-field {
     padding: 12px;
     border-radius: 5px;
@@ -51,6 +62,7 @@
     cursor: pointer;
 }
 
+/* Signup Button */
 .signup-btn {
     padding: 12px;
     font-size: 16px;
@@ -65,6 +77,20 @@
     display: block;
 }
 
+/* Hover Effect */
 .signup-btn:hover {
     background-color: #218838;
+}
+
+/* Mobile Responsive Scroll */
+@media (max-width: 480px) {
+    .signup-container {
+        align-items: flex-start; /* Aligns form at the top */
+    }
+
+    .signup-form {
+        max-height: 100vh; /* Allows scrolling */
+        overflow-y: auto;
+        margin-top: 20px;
+    }
 }

@@ -1,53 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../axios';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable'; // Import the autoTable plugin
+import 'jspdf-autotable'; 
 import "../css/report.css"
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const ReportPage = () => {
   const [courses, setCourses] = useState([]);
- const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const navBarStyle = {
-    padding: '10px 20px',
-    backgroundColor: '#343a40',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 999,
-  };
 
-  const buttonStyle = {
-    backgroundColor: '#007bff',
-    color: '#fff',
-    padding: '10px 15px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  };
-  const logoutbuttonStyle = {
-    backgroundColor: '#dc3545',
-    color: '#fff',
-    border: 'none',
-    padding: '8px 15px',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    position: 'absolute', // Position relative to the nearest positioned ancestor
-    bottom: '10px',
-    left: '10px'
-  };
-
-  const activeLinkStyle = {
-    color: '#007bff',
-    fontWeight: 'bold',
-    textDecoration: 'none',
-  };
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -62,174 +27,204 @@ const ReportPage = () => {
 
   const downloadCoursePDF = (course) => {
     const doc = new jsPDF();
-
-    // Format syllabus as bullet points
     const syllabusText = course.syllabus && course.syllabus.length > 0
-      ? course.syllabus.map((item) => `• ${item.topic || 'No topic available'}`).join('\n')  // Assuming each item has a 'topic' field
+      ? course.syllabus.map((item) => `• ${item.topic || 'No topic available'}`).join('\n')
       : 'No syllabus available';
 
-    // Define table headers and content
     const headers = ['Course Name', 'Provider', 'Rating', 'Syllabus'];
-    const data = [
-      [
-        course.title,
-        course.provider,
-        course.rating || 'N/A',
-        syllabusText,  // Using formatted syllabus text
-      ],
-    ];
+    const data = [[course.title, course.provider, course.rating || 'N/A', syllabusText]];
 
-    // Title for the PDF
     doc.text('Course Report', 20, 20);
     doc.setFontSize(12);
     doc.text(`Details for ${course.title}`, 20, 30);
 
-    // Generate table in PDF using autoTable
     doc.autoTable({
       startY: 40,
       head: [headers],
       body: data,
       theme: 'grid',
-      columnStyles: {
-        0: { cellWidth: 50 }, // Course Name
-        1: { cellWidth: 50 }, // Provider
-        2: { cellWidth: 30 }, // Rating
-        3: { cellWidth: 70 }, // Syllabus (as bullet points)
-      },
+      columnStyles: { 0: { cellWidth: 50 }, 1: { cellWidth: 50 }, 2: { cellWidth: 30 }, 3: { cellWidth: 70 } },
     });
 
-    // Save the PDF
     doc.save(`${course.title.replace(/\s+/g, '_')}_details.pdf`);
   };
+
   const logout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
     navigate('/');
   };
+
   return (
     <div>
-    <div style={navBarStyle}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <button
-          onClick={() => setDrawerOpen(!drawerOpen)}
-          style={{ ...buttonStyle, backgroundColor: 'transparent', color: '#fff', marginRight: '20px' }}
-        >
-          <FaUser style={{ marginRight: '8px' }} />
+      {/* Responsive Navbar */}
+      <nav className="navbar">
+      <button className="profile-icon" onClick={() => setDrawerOpen(!drawerOpen)}>
+          <FaUser />
         </button>
-      </div>
-    </div>
+        <div className="logo">Admin Dashboard</div>
+        {/* <button className="profile-icon" onClick={() => setDrawerOpen(!drawerOpen)}>
+          <FaUser />
+        </button> */}
+      </nav>
 
-    {drawerOpen && (
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '250px',
-          height: '100%',
-          backgroundColor: '#343a40',
-          color: '#fff',
-          padding: '20px',
-          zIndex: 999,
-          boxShadow: '2px 0 5px rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <button
-          onClick={() => setDrawerOpen(false)}
-          style={{
-            backgroundColor: 'transparent',
-            color: '#fff',
-            border: 'none',
-            fontSize: '20px',
-            cursor: 'pointer',
-            marginBottom: '20px',
-          }}
-        >
-          &times;
-        </button>
-        <nav>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '10px' }}>
-              <Link
-                to="/admin-dashboard"
-                style={location.pathname === "/admin-dashboard" ? activeLinkStyle : { color: '#fff', textDecoration: 'none' }}
-              >
-               Home
-              </Link>
-            </li>
-            <li style={{ marginBottom: '10px' }}>
-              <Link
-                to="/managecourse"
-                style={location.pathname === "/managecourse" ? activeLinkStyle : { color: '#fff', textDecoration: 'none' }}
-              >
-                Course Management
-              </Link>
-            </li>
-            <li style={{ marginBottom: '10px' }}>
-              <Link
-                to="/manageuser"
-                style={location.pathname === "/manageuser" ? activeLinkStyle : { color: '#fff', textDecoration: 'none' }}
-              >
-                User Management
-              </Link>
-            </li>
-            <li style={{ marginBottom: '10px' }}>
-              <Link
-                to="/report"
-                style={location.pathname === "/report" ? activeLinkStyle : { color: '#fff', textDecoration: 'none' }}
-              >
-                View Report
-              </Link>
-            </li>
-            <li style={{ marginBottom: '10px' }}>
-              <Link
-                to="/announcement"
-                style={location.pathname === "/announcement" ? activeLinkStyle : { color: '#fff', textDecoration: 'none' }}
-              >
-                Announcement
-              </Link>
-            </li>
-            <button style={logoutbuttonStyle} onClick={logout}>
-          Logout
-        </button>
+      {/* Sidebar for Menu (Collapsible on Small Screens) */}
+      {menuOpen && (
+        <div className="sidebar">
+          <ul>
+            <li><Link to="/admin-dashboard" onClick={() => setMenuOpen(false)}>Home</Link></li>
+            <li><Link to="/managecourse" onClick={() => setMenuOpen(false)}>Course Management</Link></li>
+            <li><Link to="/manageuser" onClick={() => setMenuOpen(false)}>User Management</Link></li>
+            <li><Link to="/report" onClick={() => setMenuOpen(false)}>View Report</Link></li>
+            <li><Link to="/announcement" onClick={() => setMenuOpen(false)}>Announcement</Link></li>
+            <button className="logout-btn" onClick={logout}>Logout</button>
           </ul>
-        </nav>
-      </div>
-    )}
-    <div style={{ padding: '20px' }}>
-      <h2 style={{ marginBottom: '20px', display:"flex", justifyContent:"center",  paddingTop:"30px"}}>Course Report</h2>
+        </div>
+      )}
 
-      {/* Box for Table */}
-      <div className="table-box">
-        <table className="course-table">
-          <thead>
-            <tr>
-              <th>Course Name</th>
-              <th>Provider</th>
-              <th>Rating</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map(course => (
-              <tr key={course._id}>
-                <td>{course.title}</td>
-                <td>{course.provider}</td>
-                <td>{course.rating || 'N/A'}</td>
-                <td>
-                  <button 
-                    onClick={() => downloadCoursePDF(course)}
-                    style={{ padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-                  >
-                    Download PDF
-                  </button>
-                </td>
+      {/* User Sidebar */}
+      {drawerOpen && (
+        <div className="user-sidebar">
+          <button className="close-btn" onClick={() => setDrawerOpen(false)}>&times;</button>
+          <nav>
+            <ul>
+              <li><Link to="/admin-dashboard" onClick={() => setDrawerOpen(false)}>Home</Link></li>
+              <li><Link to="/managecourse" onClick={() => setDrawerOpen(false)}>Course Management</Link></li>
+              <li><Link to="/manageuser" onClick={() => setDrawerOpen(false)}>User Management</Link></li>
+              <li><Link to="/report" onClick={() => setDrawerOpen(false)}>View Report</Link></li>
+              <li><Link to="/announcement" onClick={() => setDrawerOpen(false)}>Announcement</Link></li>
+              <button className="logout-btn" onClick={logout}>Logout</button>
+            </ul>
+          </nav>
+        </div>
+      )}
+
+      {/* Page Content */}
+      <div className="content">
+        <h2 className="page-title">Course Report</h2>
+
+        {/* Table Container */}
+        <div className="table-box">
+          <table className="course-table">
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <th>Provider</th>
+                <th>Rating</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {courses.map(course => (
+                <tr key={course._id}>
+                  <td>{course.title}</td>
+                  <td>{course.provider}</td>
+                  <td>{course.rating || 'N/A'}</td>
+                  <td>
+                    <button className="download-btn" onClick={() => downloadCoursePDF(course)}>
+                      Download PDF
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      {/* Styles */}
+      <style>{`
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 20px;
+          background-color: #343a40;
+          color: white;
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 999;
+        }
+        .menu-toggle, .profile-icon {
+          background: transparent;
+          border: none;
+          color: white;
+          font-size: 20px;
+          cursor: pointer;
+        }
+        .sidebar {
+          position: fixed;
+          top: 50px;
+          left: 0;
+          width: 250px;
+          height: 100%;
+          background: #343a40;
+          color: white;
+          padding: 20px;
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+        .sidebar ul {
+          list-style: none;
+          padding: 0;
+        }
+        .sidebar ul li {
+          margin: 15px 0;
+        }
+        .sidebar a, .user-sidebar a {
+          color: white;
+          text-decoration: none;
+        }
+        .logout-btn {
+          background: #dc3545;
+          color: white;
+          padding: 10px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          width: 100%;
+          margin-top: 10px;
+        }
+        .user-sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 250px;
+          height: 100%;
+          background: #343a40;
+          color: white;
+          padding: 20px;
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+        .close-btn {
+          background: transparent;
+          border: none;
+          font-size: 20px;
+          color: white;
+          cursor: pointer;
+          margin-bottom: 20px;
+        }
+        .page-title {
+          text-align: center;
+          padding-top: 60px;
+        }
+        .download-btn {
+          background: #007bff;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        @media (max-width: 768px) {
+          .menu-toggle {
+            display: block;
+          }
+          .sidebar {
+            width: 200px;
+          }
+        }
+      `}</style>
     </div>
   );
 };

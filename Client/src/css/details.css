@@ -6,7 +6,7 @@
   }
    */
   .container {
-    width: 2000px;
+    width: 100%;
     margin: 0 auto;
     background-color: white;
     padding: 20px;
@@ -117,7 +117,7 @@
     font-size: 1.1rem;
     border-radius: 4px;
     cursor: pointer;
-    width: 15%;
+    width: 35%;
     transition: background-color 0.3s ease;
    
     

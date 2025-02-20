@@ -1,27 +1,23 @@
-import {Router} from 'express';
-import { createCourse, deleteCourse, editCourse, getCourseDetails, getCourses, getCoursesByProvider } from '../controller/course.controller.mjs';
-
-import { Auth } from '../middleware/auth.mjs';
-
+import { Router } from "express";
+import { createCourse, deleteCourse, editCourse, getCourseDetails, getCourses, getCoursesByProvider } from "../controller/course.controller.mjs";
+import { Auth, authorizeRoles } from "../middleware/auth.mjs";
 
 const courseRoute = Router();
 
+// Provider can create courses
+courseRoute.post("/courses", Auth, authorizeRoles("provider"), createCourse);
 
-courseRoute.post('/courses',Auth, createCourse);
+// Public access
+courseRoute.get("/mycourses", getCourses);
+courseRoute.get("/course/:courseId", getCourseDetails);
 
-courseRoute.get('/mycourses', getCourses);
-courseRoute.get('/course/:courseId', getCourseDetails);
+// Get courses by provider (Provider only)
+courseRoute.get("/courses/provider/:username", Auth, authorizeRoles("provider"), getCoursesByProvider);
 
-courseRoute.get('/courses/provider/:username', getCoursesByProvider);
+// Provider can edit courses
+courseRoute.patch("/edit-course/:courseId", Auth, authorizeRoles("provider"), editCourse);
 
+// Admin can delete courses
+courseRoute.delete("/delete-course/:courseId", Auth, authorizeRoles("admin"), deleteCourse);
 
-
-courseRoute.patch('/edit-course/:courseId',Auth, editCourse);
-
-
-courseRoute.delete('/delete-course/:courseId', deleteCourse);
-
-
-
-
-export default courseRoute
+export default courseRoute;

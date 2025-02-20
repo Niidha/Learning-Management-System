@@ -22,14 +22,24 @@ const Login = () => {
                 
                 const { userId, token, user } = data;
 
-               
+                // Store user details in Redux
+                dispatch(createUser({
+                    id: userId,
+                    username: user.username,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    isAuthenticated: true, // Add authentication state
+                }));
+
+                // Store authentication details in localStorage
                 localStorage.setItem("userId", userId);
                 localStorage.setItem("access_token", token);
+                localStorage.setItem("role", user.role);
 
-                dispatch(createUser(user)); 
                 toast.success("Logged In");
 
-               
+                // Role-based navigation
                 switch (user.role) {
                     case "admin":
                         navigate("/admin-dashboard");
@@ -44,7 +54,7 @@ const Login = () => {
                 }
             } catch (err) {
                 console.error(err.message);
-                toast.error(err.response?.data.message || "Login failed. Please try again.");
+                toast.error(err.response?.data?.message || "Login failed. Please try again.");
             }
         }
     });

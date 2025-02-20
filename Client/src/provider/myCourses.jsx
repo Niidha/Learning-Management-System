@@ -13,7 +13,7 @@ const MyCourses = () => {
   
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(null); // For delete confirmation modal
+  const [confirmDelete, setConfirmDelete] = useState(null); 
 
     const handleDelete = (id) => {
       setConfirmDelete(id); // Set the course to delete on confirmation
@@ -88,7 +88,7 @@ const MyCourses = () => {
     fetchCourses();
   }, [username]);
 
-  const handleEdit = (courseId) => {
+  const handleEdit = (courseId) => { 
     navigate(`/edit-course/${courseId}`);
   };
 

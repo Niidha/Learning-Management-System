@@ -5,23 +5,47 @@ import { studentCollection } from "../model/user.model.mjs";
 import mongoose from "mongoose";
 
 env.config();
-const signUp = async (req, res) => {
+
+
+export const signUp = async (req, res) => {
   try {
     const { body } = req;
+
+    // Check if username already exists
     const usernameCount = await studentCollection.countDocuments({ username: body.username });
     if (usernameCount > 0) {
-      return res.status(409).send({ message: "Username already Exist" });
+      return res.status(409).send({ message: "Username already exists" });
     }
 
-  
-
+    // Hash password before storing
     body.password = await bcrypt.hash(body.password, 10);
+    
+    // Create new user
     const response = await studentCollection.create(body);
     if (!response?._id) {
       return res.status(400).send({ message: "Bad request" });
     }
-    response.password = null;
-    const token = jwt.sign({ sub: response }, process.env.JWT_KEY, { expiresIn: "30d" });
+
+    response.password = undefined; // Remove password from response
+
+    // Select the appropriate JWT secret key based on role
+    let jwtKey;
+    switch (response.role) {
+      case "admin":
+        jwtKey = process.env.JWT_KEY_ADMIN;
+        break;
+      case "provider":
+        jwtKey = process.env.JWT_KEY_PROVIDER;
+        break;
+      case "student":
+      default:
+        jwtKey = process.env.JWT_KEY_STUDENT;
+        break;
+    }
+
+    // Generate token
+    const token = jwt.sign({ id: response._id, role: response.role }, jwtKey, { expiresIn: "30d" });
+
     return res.status(201).send({ message: "User created!", user: response, token });
   } catch (err) {
     return res.status(500).send({ message: err.message || "Internal server error" });
@@ -30,28 +54,44 @@ const signUp = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-      const { username, password } = req.body;
-      const user = await studentCollection.findOne({ username });
+    const { username, password } = req.body;
+    const user = await studentCollection.findOne({ username });
 
-      if (!user) {
-          return res.status(404).send({ message: "User not found" });
-      }
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
 
-      const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(400).send({ message: "Invalid credentials" });
+    }
 
-      if (!isValidPassword) {
-          return res.status(400).send({ message: "Invalid credentials" });
-      }
+    user.password = undefined; // Hide password from response
 
-      user.password = undefined;
-      const token = jwt.sign({ sub: user }, process.env.JWT_KEY, { expiresIn: "7d" });
+    // Select the correct JWT key based on user role
+    let jwtKey;
+    switch (user.role) {
+      case "admin":
+        jwtKey = process.env.JWT_KEY_ADMIN;
+        break;
+      case "provider":
+        jwtKey = process.env.JWT_KEY_PROVIDER;
+        break;
+      case "student":
+      default:
+        jwtKey = process.env.JWT_KEY_STUDENT;
+        break;
+    }
 
-      return res.status(200).send({ message: "User logged in", user, token });
+    // Generate token
+    const token = jwt.sign({ id: user._id, role: user.role }, jwtKey, { expiresIn: "7d" });
+
+    return res.status(200).send({ message: "User logged in", user, token });
   } catch (err) {
-      return res.status(500).send({ message: err.message || "Internal server error" });
+    return res.status(500).send({ message: err.message || "Internal server error" });
   }
 };
-  
+
 export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;

@@ -40,13 +40,7 @@ const MainNavbar = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <FiSearch className="search-icon" style={{
-              position: 'absolute',
-              top: '50%',
-              left: '16%',
-              transform: 'translateY(-50%)',
-              color: '#6c757d',
-            }} />
+          
         </div>
 
         <div className="navbar-right">
