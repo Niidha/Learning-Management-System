@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { favoriteCollection } from "../model/favourites.model.mjs";
 
 
@@ -31,19 +32,21 @@ export const addFavorite = async (req, res) => {
   }
 };
 
-
 export const getFavorites = async (req, res) => {
-  const { user_id } = req.params;
+  const { userId } = req.params;
 
-  console.log("Request received for fetching favorites for user:", user_id);
-
-  if (!user_id) {
-    return res.status(400).json({ message: "user_id is required." });
+  if (!userId) {
+    return res.status(400).json({ message: "userId is required." });
   }
 
   try {
-  
-    const favorites = await favoriteCollection.find({ user_id }).populate("course_id");
+    const userObjectId = new mongoose.Types.ObjectId(userId); // ✅ FIXED
+
+    const favorites = await favoriteCollection
+      .find({ user_Id: userObjectId })
+      .populate("course_Id");
+
+    console.log("Fetched favorites:", favorites); // Debugging log
 
     res.status(200).json({
       message: "Favorites fetched successfully.",

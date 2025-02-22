@@ -113,7 +113,7 @@ const styles = {
       paddingRight: '0px',
     },
     image: {
-      maxWidth: '80%', // Reduce image size for smaller screens
+      maxWidth: '80%',
     },
   },
 };

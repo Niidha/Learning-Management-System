@@ -18,16 +18,7 @@ const MyCourses = () => {
     const handleDelete = (id) => {
       setConfirmDelete(id); // Set the course to delete on confirmation
     };
-    // const handleDelete = async (courseId) => {
-    //   try {
-    //     const response = await api.delete(`/delete-course/${courseId}`);
-    //     toast.success(response.data.message);
-    //     setCourses(courses.filter((course) => course._id !== courseId));
-    //   } catch (err) {
-    //     console.error('Error deleting course:', err);
-    //     toast.error(err.response?.data?.message || err.message || 'An error occurred while deleting the course');
-    //   }
-    // };
+    
   
     const confirmDeleteCourse = () => {
       api.delete(`/delete-course/${confirmDelete}`)

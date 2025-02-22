@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const ProviderDashboard = () => {
   const navigate = useNavigate();
-  const { username } = useSelector((state) => state.user || {}); // Getting current user's username
+  const { username } = useSelector((state) => state.user || {}); 
 
   const [courses, setCourses] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -18,10 +18,10 @@ const ProviderDashboard = () => {
     const fetchCourses = async () => {
       try {
         const response = await api.get('users/courses');
-        // Filter courses to display only those that have the logged-in user's username as the provider
+        
         const userCourses = response.data.map(course => ({
           ...course,
-          isUserCourse: course.provider === username, // Add a flag to check if the course is the user's course
+          isUserCourse: course.provider === username, 
         }));
         setCourses(userCourses);
       } catch (err) {

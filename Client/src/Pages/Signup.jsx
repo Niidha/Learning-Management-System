@@ -12,7 +12,7 @@ const Signup = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Validation Schema
+
     const validationSchema = Yup.object({
         name: Yup.string()
             .required("Name is required")
@@ -45,7 +45,7 @@ const Signup = () => {
         role: Yup.string().required("Role selection is required"),
     });
 
-    // Formik for form handling
+   
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -60,14 +60,13 @@ const Signup = () => {
             try {
                 const { data } = await api.post("/users/signup", values);
 
-                // Store user details in localStorage and Redux
+               
                 localStorage.setItem("access_token", data.token);
                 localStorage.setItem("userRole", data.user.role);
                 dispatch(createUser(data.user));
 
                 toast.success("Account Created Successfully!");
 
-                // Redirect based on role
                 switch (data.user.role) {
                     case "admin":
                         navigate("/admin-dashboard");
@@ -86,7 +85,7 @@ const Signup = () => {
         },
     });
 
-    // Prevent Spaces in Input Fields
+    
     const preventSpaces = (e) => {
         if (e.key === " ") {
             e.preventDefault();

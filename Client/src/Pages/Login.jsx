@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import { useFormik } from "formik";
-import { api } from '../axios';
-import { useNavigate } from 'react-router';
+import { api } from "../axios";
+import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import toast from 'react-hot-toast';
-import { createUser } from '../Redux/userSlice';
+import toast from "react-hot-toast";
+import { createUser } from "../Redux/userSlice";
 import "../css/login.css";  
 
 const Login = () => {
@@ -14,49 +14,47 @@ const Login = () => {
     const formik = useFormik({
         initialValues: {
             username: "",
-            password: ""
+            password: "",
         },
         onSubmit: async (values) => {
             try {
                 const { data } = await api.post("/users/login", values);
                 
-                const { userId, token, user } = data;
+                const { user, token } = data; 
 
-                // Store user details in Redux
+                if (!user || !user._id) {
+                    throw new Error("Invalid user data received");
+                }
+
                 dispatch(createUser({
-                    id: userId,
+                    id: user._id,
                     username: user.username,
                     name: user.name,
                     email: user.email,
                     role: user.role,
-                    isAuthenticated: true, // Add authentication state
+                    isAuthenticated: true,
                 }));
 
-                // Store authentication details in localStorage
-                localStorage.setItem("userId", userId);
+                
+                localStorage.setItem("user", JSON.stringify(user));
                 localStorage.setItem("access_token", token);
-                localStorage.setItem("role", user.role);
+                console.log("Stored token:", token);
 
-                toast.success("Logged In");
 
-                // Role-based navigation
-                switch (user.role) {
-                    case "admin":
-                        navigate("/admin-dashboard");
-                        break;
-                    case "provider":
-                        navigate("/provider-dashboard");
-                        break;
-                    case "student":
-                    default:
-                        navigate("/courses");
-                        break;
+                toast.success("Logged In Successfully!");
+
+                if (user.role === "admin") {
+                    navigate("/admin-dashboard");
+                } else if (user.role === "provider") {
+                    navigate("/provider-dashboard");
+                } else {
+                    navigate("/courses");
                 }
             } catch (err) {
-                console.error(err.message);
+                console.error("Login error:", err);
                 toast.error(err.response?.data?.message || "Login failed. Please try again.");
             }
-        }
+        },
     });
 
     return (
@@ -70,6 +68,7 @@ const Login = () => {
                     type="text"
                     name="username"
                     placeholder="Enter username"
+                    required
                 />
                 <input
                     onChange={formik.handleChange}
@@ -78,6 +77,7 @@ const Login = () => {
                     type="password"
                     name="password"
                     placeholder="Enter password"
+                    required
                 />
                 <button className="btn login-btn w-100" type="submit">Login</button>
                 <button

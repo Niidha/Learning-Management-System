@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+const storedUser = JSON.parse(localStorage.getItem("user")) || {
   id: "",
   username: "",
   name: "",
@@ -9,38 +9,56 @@ const initialState = {
   age: "",
   qualification: "",
   preferredLanguage: "",
-  isAuthenticated: false, // Track if user is logged in
+  isAuthenticated: false,
   loading: false,
   error: null,
 };
 
 const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: storedUser,
   reducers: {
     createUser: (state, action) => {
-      return {
+      const newUser = {
         ...state,
-        id: action.payload._id,
-        username: action.payload.username,
-        name: action.payload.name,
-        email: action.payload.email,
-        role: action.payload.role,
+        id: action.payload.id || action.payload._id || "", // Support both 'id' and '_id'
+        username: action.payload.username || "",
+        name: action.payload.name || "",
+        email: action.payload.email || "",
+        role: action.payload.role || "",
         isAuthenticated: true, // User is now logged in
       };
+
+      localStorage.setItem("user", JSON.stringify(newUser)); // Persist user data
+      return newUser;
     },
     updateUser: (state, action) => {
-      return {
+      const updatedUser = {
         ...state,
         ...action.payload, // Update only provided fields
       };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // Update stored data
+      return updatedUser;
     },
-    logoutUser: () => initialState, // Reset user state on logout
+    logoutUser: () => {
+      localStorage.removeItem("user"); // Clear stored user data
+      return {
+        id: "",
+        username: "",
+        name: "",
+        email: "",
+        role: "",
+        age: "",
+        qualification: "",
+        preferredLanguage: "",
+        isAuthenticated: false,
+        loading: false,
+        error: null,
+      };
+    },
   },
 });
 
-
-
-
 export const { createUser, updateUser, logoutUser } = userSlice.actions;
-export const { reducer: userReducer } = userSlice;
+export const userReducer = userSlice.reducer;

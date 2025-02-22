@@ -17,8 +17,8 @@ userRoute.patch("/update/:userId", Auth, updateUser);
 userRoute.get("/courses", Auth, getCourses);
 userRoute.get("/:userId", Auth, getUserDetails);
 userRoute.post("/favs", Auth, addFavorite);
-userRoute.get("/favourites/:userId", Auth, getFavorites);
-userRoute.delete("/remove", Auth, removeFromFavorite);
+userRoute.get("/favourites/:userId", getFavorites);
+userRoute.delete("/remove",  removeFromFavorite);
 
 // Fetch course details (Student and Provider only)
 userRoute.get("/courses/:id", Auth, authorizeRoles("student", "provider"), async (req, res) => {

@@ -12,12 +12,12 @@ const CourseManagement = () => {
   const [editCourse, setEditCourse] = useState(null);
   const [editedData, setEditedData] = useState({ title: "", provider: "", rating: "" });
   const [viewCourse, setViewCourse] = useState(null);
-  const [drawerOpen, setDrawerOpen] = useState(false); // Drawer open state
+  const [drawerOpen, setDrawerOpen] = useState(false); 
 
  
-  const [confirmDelete, setConfirmDelete] = useState(null); // For delete confirmation modal
+  const [confirmDelete, setConfirmDelete] = useState(null); 
 
-  const location = useLocation(); // Get the current location (URL path)
+  const location = useLocation(); 
 
   useEffect(() => {
     api.get("mycourses")
@@ -220,16 +220,15 @@ const CourseManagement = () => {
                 <td className="p-2 border">{course.provider}</td>
                 <td className="p-2 border">{course.rating}</td>
                 <td className="p-2 border">
-                  <button onClick={() => handleView(course)} className="btn-view px-3 py-1 rounded mr-3">View</button>
-                  <button onClick={() => handleEdit(course)} className="btn-edit px-3 py-1 rounded mr-3">Edit</button>
-                  <button onClick={() => handleDelete(course._id)} className="btn-delete px-3 py-1 rounded">Delete</button>
+                  <button onClick={() => handleView(course)} className="btn-view px-3 py-1 mb-2 rounded mr-3">View</button>
+                  <button onClick={() => handleEdit(course)} className="btn-edit px-3 py-1 mb-2 rounded mr-3">Edit</button>
+                  <button onClick={() => handleDelete(course._id)} className="btn-delete px-3 mb-2 py-1 rounded">Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* Edit Course Modal */}
         {editCourse && (
           <div className="modal-overlay">
             <div className="modal-content">

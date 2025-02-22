@@ -11,24 +11,23 @@ export const signUp = async (req, res) => {
   try {
     const { body } = req;
 
-    // Check if username already exists
+  
     const usernameCount = await studentCollection.countDocuments({ username: body.username });
     if (usernameCount > 0) {
       return res.status(409).send({ message: "Username already exists" });
     }
 
-    // Hash password before storing
+   
     body.password = await bcrypt.hash(body.password, 10);
     
-    // Create new user
+   
     const response = await studentCollection.create(body);
     if (!response?._id) {
       return res.status(400).send({ message: "Bad request" });
     }
 
-    response.password = undefined; // Remove password from response
-
-    // Select the appropriate JWT secret key based on role
+    response.password = undefined;
+   
     let jwtKey;
     switch (response.role) {
       case "admin":
@@ -43,7 +42,6 @@ export const signUp = async (req, res) => {
         break;
     }
 
-    // Generate token
     const token = jwt.sign({ id: response._id, role: response.role }, jwtKey, { expiresIn: "30d" });
 
     return res.status(201).send({ message: "User created!", user: response, token });
@@ -66,9 +64,9 @@ export const login = async (req, res) => {
       return res.status(400).send({ message: "Invalid credentials" });
     }
 
-    user.password = undefined; // Hide password from response
+    user.password = undefined; 
 
-    // Select the correct JWT key based on user role
+  
     let jwtKey;
     switch (user.role) {
       case "admin":
@@ -83,7 +81,7 @@ export const login = async (req, res) => {
         break;
     }
 
-    // Generate token
+   
     const token = jwt.sign({ id: user._id, role: user.role }, jwtKey, { expiresIn: "7d" });
 
     return res.status(200).send({ message: "User logged in", user, token });

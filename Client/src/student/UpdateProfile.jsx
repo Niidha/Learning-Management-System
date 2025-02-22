@@ -5,7 +5,6 @@ import { api } from "../axios";
 import { createUser } from "../Redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
-// import "./css/update.css";
 
 const UpdateUserProfile = () => {
   const [formData, setFormData] = useState({
@@ -25,18 +24,33 @@ const UpdateUserProfile = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!userId) {
+    let storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!userId && storedUser) {
+      dispatch(createUser(storedUser)); // Restore user in Redux
+    }
+
+    if (!userId && !storedUser) {
       toast.error("User not logged in");
       return;
     }
 
     const fetchUserDetails = async () => {
       try {
-        const response = await api.get(`users/${userId}`, {
+        const response = await api.get(`users/${storedUser?.id || userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setFormData(response.data.user);
-        dispatch(createUser(response.data.user));
+
+        setFormData((prevState) => ({
+          ...prevState,
+          username: response.data.user?.username || "",
+          name: response.data.user?.name || "",
+          email: response.data.user?.email || "",
+          age: response.data.user?.age || "",
+          qualification: response.data.user?.qualification || "",
+          preferredLanguage: response.data.user?.preferredLanguage || "",
+        }));
+
+        dispatch(createUser(response.data.user)); // Store user details in Redux
       } catch (error) {
         toast.error(
           error.response?.data?.message || "An error occurred while fetching user details"
@@ -58,17 +72,32 @@ const UpdateUserProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
+    // Filter out empty fields so they don't get sent as `""`
+    const filteredData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => value !== "")
+    );
+  
     try {
-      const response = await api.patch(`users/update/${userId}`, formData, {
+      const response = await api.patch(`users/update/${userId}`, filteredData, {
         headers: { Authorization: `Bearer ${token}` },
       });
+  
       toast.success(response.data.message);
+  
+      // Update Redux & local storage
+      dispatch(createUser(response.data.updatedUser));
+      localStorage.setItem("user", JSON.stringify(response.data.updatedUser));
+  
+      // Navigate to Courses Page
+      navigate("/courses");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
+  
     setLoading(false);
   };
-
+  
   return (
     <div>
       <Navbar />
@@ -85,7 +114,6 @@ const UpdateUserProfile = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="form-group">
@@ -97,7 +125,6 @@ const UpdateUserProfile = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="form-group">
@@ -109,18 +136,16 @@ const UpdateUserProfile = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">Password (Leave blank to keep unchanged)</label>
               <input
                 type="password"
                 className="form-control"
                 id="password"
                 name="password"
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="form-group">
@@ -132,7 +157,6 @@ const UpdateUserProfile = () => {
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="form-group">
@@ -144,7 +168,6 @@ const UpdateUserProfile = () => {
                 name="qualification"
                 value={formData.qualification}
                 onChange={handleChange}
-                required
               />
             </div>
             <div className="form-group">
@@ -155,7 +178,6 @@ const UpdateUserProfile = () => {
                 name="preferredLanguage"
                 value={formData.preferredLanguage}
                 onChange={handleChange}
-                required
               >
                 <option value="">Select Language</option>
                 <option value="English (UK)">English (UK)</option>
