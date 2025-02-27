@@ -4,8 +4,6 @@ import { api } from "../axios";
 
 const UsersPage = ({ isDrawerOpen }) => {
   const [users, setUsers] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -20,31 +18,15 @@ const UsersPage = ({ isDrawerOpen }) => {
     fetchUsers();
   }, []);
 
-  const handleDelete = (id) => {
-    setUserToDelete(id);
-    setShowDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    if (userToDelete) {
-      api
-        .delete(`/admin/user/${userToDelete}`)
-        .then(() => {
-          setUsers(users.filter((user) => user._id !== userToDelete));
-          setShowDeleteModal(false);
-          setUserToDelete(null);
-          toast.success("User deleted successfully!");
-        })
-        .catch((err) => {
-          console.error("Error deleting user:", err);
-          toast.error("Failed to delete user!");
-        });
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/admin/user/${id}`);
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      toast.success("User deleted successfully!");
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      toast.error("Failed to delete user!");
     }
-  };
-
-  const cancelDelete = () => {
-    setShowDeleteModal(false);
-    setUserToDelete(null);
   };
 
   return (
@@ -62,8 +44,8 @@ const UsersPage = ({ isDrawerOpen }) => {
           </thead>
           <tbody>
             {users.length > 0 ? (
-              users.map((user, index) => (
-                <tr key={index}>
+              users.map((user) => (
+                <tr key={user._id}>
                   <td style={tableCellStyles}>{user.name}</td>
                   <td style={tableCellStyles}>{user.email}</td>
                   <td style={tableCellStyles}>{user.role}</td>
