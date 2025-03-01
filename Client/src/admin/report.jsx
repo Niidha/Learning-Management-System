@@ -62,10 +62,8 @@ const ReportPage = () => {
       <button className="profile-icon" onClick={() => setDrawerOpen(!drawerOpen)}>
           <FaUser />
         </button>
-        <div className="logo">Admin Dashboard</div>
-        {/* <button className="profile-icon" onClick={() => setDrawerOpen(!drawerOpen)}>
-          <FaUser />
-        </button> */}
+     
+       
       </nav>
 
       {/* Sidebar for Menu (Collapsible on Small Screens) */}

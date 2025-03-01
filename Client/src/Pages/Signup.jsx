@@ -12,7 +12,6 @@ const Signup = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-
     const validationSchema = Yup.object({
         name: Yup.string()
             .required("Name is required")
@@ -45,7 +44,6 @@ const Signup = () => {
         role: Yup.string().required("Role selection is required"),
     });
 
-   
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -60,7 +58,6 @@ const Signup = () => {
             try {
                 const { data } = await api.post("/users/signup", values);
 
-               
                 localStorage.setItem("access_token", data.token);
                 localStorage.setItem("userRole", data.user.role);
                 dispatch(createUser(data.user));
@@ -85,7 +82,6 @@ const Signup = () => {
         },
     });
 
-    
     const preventSpaces = (e) => {
         if (e.key === " ") {
             e.preventDefault();
@@ -105,7 +101,12 @@ const Signup = () => {
                     type="text"
                     name="name"
                     placeholder="Enter name"
+                    onBlur={formik.handleBlur}
                 />
+                {formik.touched.name && formik.errors.name && (
+                    <div className="error-message">{formik.errors.name}</div>
+                )}
+
                 <input
                     onChange={(e) => formik.setFieldValue("username", e.target.value.trim())}
                     onKeyDown={preventSpaces}
@@ -114,7 +115,12 @@ const Signup = () => {
                     type="text"
                     name="username"
                     placeholder="Enter username"
+                    onBlur={formik.handleBlur}
                 />
+                {formik.touched.username && formik.errors.username && (
+                    <div className="error-message">{formik.errors.username}</div>
+                )}
+
                 <input
                     onChange={(e) => formik.setFieldValue("email", e.target.value.trim())}
                     onKeyDown={preventSpaces}
@@ -123,7 +129,12 @@ const Signup = () => {
                     type="text"
                     name="email"
                     placeholder="Enter email"
+                    onBlur={formik.handleBlur}
                 />
+                {formik.touched.email && formik.errors.email && (
+                    <div className="error-message">{formik.errors.email}</div>
+                )}
+
                 <input
                     onChange={(e) => formik.setFieldValue("password", e.target.value.trim())}
                     onKeyDown={preventSpaces}
@@ -132,7 +143,12 @@ const Signup = () => {
                     type="password"
                     name="password"
                     placeholder="Enter password"
+                    onBlur={formik.handleBlur}
                 />
+                {formik.touched.password && formik.errors.password && (
+                    <div className="error-message">{formik.errors.password}</div>
+                )}
+
                 <input
                     onChange={(e) => formik.setFieldValue("confirm_password", e.target.value.trim())}
                     onKeyDown={preventSpaces}
@@ -141,17 +157,26 @@ const Signup = () => {
                     type="password"
                     name="confirm_password"
                     placeholder="Re-enter password"
+                    onBlur={formik.handleBlur}
                 />
+                {formik.touched.confirm_password && formik.errors.confirm_password && (
+                    <div className="error-message">{formik.errors.confirm_password}</div>
+                )}
+
                 <select
                     onChange={formik.handleChange}
                     value={formik.values.role}
                     className="select-field"
                     name="role"
+                    onBlur={formik.handleBlur}
                 >
                     <option value="student">Student</option>
                     <option value="provider">Provider</option>
                     <option value="admin">Admin</option>
                 </select>
+                {formik.touched.role && formik.errors.role && (
+                    <div className="error-message">{formik.errors.role}</div>
+                )}
 
                 <button className="signup-btn" type="submit">
                     Create Account

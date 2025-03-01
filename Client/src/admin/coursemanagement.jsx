@@ -44,9 +44,14 @@ const CourseManagement = () => {
 
   const handleEdit = (course) => {
     setEditCourse(course._id);
-    setEditedData({ title: course.title, provider: course.provider, rating: course.rating });
+    setEditedData({ 
+      title: course.title, 
+      provider: course.provider, 
+      rating: course.rating, 
+      description: course.description // Ensure description is included
+    });
   };
-
+  
   const handleUpdate = async () => {
     try {
       await api.patch(`/edit-course/${editCourse}`, editedData);

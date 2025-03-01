@@ -5,7 +5,7 @@ import { addToFavorites, setFavorites } from "../Redux/favSlice";
 import toast from "react-hot-toast";
 import { AiFillHeart } from "react-icons/ai";
 import { api } from "../axios";
-import MainNavbar from "./components/Mainnav";
+
 import FeedbackModal from "../Pages/feedaback";
 import { FaUser } from "react-icons/fa";
 

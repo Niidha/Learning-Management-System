@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaPhoneAlt, FaEnvelope, FaUserAlt, FaHome, FaBars } from 'react-icons/fa';
 
@@ -6,6 +6,8 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountMenuVisible, setAccountMenuVisible] = useState(false);
+  const menuRef = useRef(null);
+  const accountMenuRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -13,6 +15,19 @@ const Header = () => {
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
+        setAccountMenuVisible(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const toggleMenu = () => {
@@ -37,29 +52,32 @@ const Header = () => {
         </button>
       ) : (
         <nav style={styles.nav}>
-          <Link to="/" style={styles.menuLink}><FaHome size={18} style={styles.icon} /> Home</Link>
-          <div style={styles.menuLinkWrapper}>
-            <Link to="#" onClick={toggleAccountMenu} style={styles.menuLink}><FaUserAlt size={18} style={styles.icon} /> Account</Link>
+          <Link to="/" style={styles.menuLink} onClick={() => setMenuOpen(false)}>
+            <FaHome size={18} style={styles.icon} /> Home
+          </Link>
+          <div style={styles.menuLinkWrapper} ref={accountMenuRef}>
+            <Link to="#" onClick={toggleAccountMenu} style={styles.menuLink}>
+              <FaUserAlt size={18} style={styles.icon} /> Account
+            </Link>
             {accountMenuVisible && (
               <div style={styles.dropdownMenu}>
-                <Link to="/login" style={styles.dropdownLink}>Login</Link>
-                <Link to="/signup" style={styles.dropdownLink}>Sign Up</Link>
+                <Link to="/login" style={styles.dropdownLink} onClick={() => setAccountMenuVisible(false)}>Login</Link>
+                <Link to="/signup" style={styles.dropdownLink} onClick={() => setAccountMenuVisible(false)}>Sign Up</Link>
               </div>
             )}
           </div>
           <a href="tel:+123456789" style={styles.contactLink}><FaPhoneAlt size={20} /></a>
           <a href="mailto:contact@example.com" style={styles.contactLink}><FaEnvelope size={20} /></a>
-        
         </nav>
       )}
 
       {isMobile && menuOpen && (
-        <div style={styles.mobileMenu}>
-          <Link to="/" style={styles.dropdownLink}>Home</Link>
-          <a href="tel:+123456789" style={styles.dropdownLink}>Call Us</a>
-          <a href="mailto:contact@example.com" style={styles.dropdownLink}>Email</a>
-          <Link to="/login" style={styles.dropdownLink}>Login</Link>
-          <Link to="/signup" style={styles.dropdownLink}>Sign Up</Link>
+        <div style={styles.mobileMenu} ref={menuRef}>
+          <Link to="/" style={styles.dropdownLink} onClick={() => setMenuOpen(false)}>Home</Link>
+          <a href="tel:+123456789" style={styles.dropdownLink} onClick={() => setMenuOpen(false)}>Call Us</a>
+          <a href="mailto:contact@example.com" style={styles.dropdownLink} onClick={() => setMenuOpen(false)}>Email</a>
+          <Link to="/login" style={styles.dropdownLink} onClick={() => setMenuOpen(false)}>Login</Link>
+          <Link to="/signup" style={styles.dropdownLink} onClick={() => setMenuOpen(false)}>Sign Up</Link>
         </div>
       )}
     </header>

@@ -21,7 +21,7 @@ const UserPage = () => {
         <button onClick={() => setDrawerOpen(!drawerOpen)} className="menu-button">
         <FaUser />
         </button>
-        <div className="navbar-title">Admin Dashboard</div>
+     
         
       </nav>
 

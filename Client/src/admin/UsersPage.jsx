@@ -4,6 +4,8 @@ import { api } from "../axios";
 
 const UsersPage = ({ isDrawerOpen }) => {
   const [users, setUsers] = useState([]);
+  
+  const [confirmDelete, setConfirmDelete] = useState(null); 
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -18,15 +20,22 @@ const UsersPage = ({ isDrawerOpen }) => {
     fetchUsers();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      await api.delete(`/admin/user/${id}`);
-      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
-      toast.success("User deleted successfully!");
-    } catch (err) {
-      console.error("Error deleting user:", err);
-      toast.error("Failed to delete user!");
-    }
+ 
+ const handleDelete = (id) => {
+    setConfirmDelete(id); // Set the course to delete on confirmation
+  };
+
+  const confirmDeleteCourse = () => {
+    api.delete(`/admin/user/${confirmDelete}`)
+      .then(() => {
+        setUsers(users.filter(user => user._id !== confirmDelete));
+        toast.success("User deleted successfully!");
+        setConfirmDelete(null); // Close the modal after confirmation
+      })
+      .catch((err) => {
+        console.error("Error deleting user:", err);
+        toast.error("Failed to delete user!");
+      });
   };
 
   return (
@@ -50,12 +59,8 @@ const UsersPage = ({ isDrawerOpen }) => {
                   <td style={tableCellStyles}>{user.email}</td>
                   <td style={tableCellStyles}>{user.role}</td>
                   <td style={tableCellStyles}>
-                    <button
-                      onClick={() => handleDelete(user._id)}
-                      style={deleteButtonStyles}
-                    >
-                      Delete
-                    </button>
+                   
+                    <button onClick={() => handleDelete(user._id)}  style={deleteButtonStyles}>Delete</button>
                   </td>
                 </tr>
               ))
@@ -67,6 +72,17 @@ const UsersPage = ({ isDrawerOpen }) => {
           </tbody>
         </table>
       </div>
+      {confirmDelete && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3 className="text-lg font-bold mb-4">Are you sure you want to delete this course?</h3>
+              <div className="flex">
+                <button onClick={confirmDeleteCourse} className="btn-confirm">Confirm</button>
+                <button onClick={() => setConfirmDelete(null)} className="btn-cancel">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

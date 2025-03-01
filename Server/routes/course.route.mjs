@@ -15,7 +15,7 @@ courseRoute.get("/course/:courseId", getCourseDetails);
 courseRoute.get("/courses/provider/:username", Auth, authorizeRoles("provider"), getCoursesByProvider);
 
 // Provider can edit courses
-courseRoute.patch("/edit-course/:courseId", Auth, authorizeRoles("provider"), editCourse);
+courseRoute.patch("/edit-course/:courseId", Auth, authorizeRoles("provider","admin"), editCourse);
 
 // Admin can delete courses
 courseRoute.delete("/delete-course/:courseId", Auth, authorizeRoles("admin"), deleteCourse);
